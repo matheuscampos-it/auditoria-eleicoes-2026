@@ -37,20 +37,23 @@ Repositório aberto e independente com dados oficiais, estatísticas do Banco Ce
 ```text
 Projeto Outubro/
 ├── app/
-│   └── main.py                   # Dashboard interativo analítico em Streamlit (Local)
+│   └── main.py                   # Dashboard analítico interativo em Streamlit (Local/Cloud)
 ├── dashboard.html                # Dashboard interativo Web nativo (GitHub Pages Live)
 ├── index.html                    # Agregador Linktree oficial (GitHub Pages)
+├── legenda_instagram.txt         # Legenda pronta e otimizada (máx 1.700 caracteres)
+├── carousel_images/              # 10 slides em alta resolução (1080x1350) para Instagram (v6.0)
 ├── data/
 │   ├── database.duckdb           # Banco analítico colunar local de alta velocidade
 │   ├── macro_series_historica.csv # Séries temporais BACEN/IBGE (2002-2026)
 │   ├── macro_series_historica.json
-│   ├── media_audit_dataset.csv   # Base categorizada de investigações e notícias
+│   ├── media_audit_dataset.csv   # Base categorizada de 24 investigações e notícias com links
 │   └── media_audit_dataset.json
 ├── pipelines/
 │   ├── extract_macro.py          # Extração e consolidação macroeconômica
-│   ├── extract_media_audit.py    # Classificação léxica e enriquecimento de notícias
-│   └── duckdb_storage.py         # Ingestão e criação de views analíticas SQL no DuckDB
-├── requirements.txt              # Dependências Python (Streamlit, Plotly, DuckDB, Pandas)
+│   ├── extract_media_audit.py    # Classificação léxica, fontes diretas e enriquecimento de notícias
+│   ├── duckdb_storage.py         # Ingestão e criação de views analíticas SQL no DuckDB
+│   └── generate_carousel_images.py # Renderizador visual em lote dos 10 slides do Instagram
+├── requirements.txt              # Dependências Python (Streamlit, Plotly, DuckDB, Pandas, Pillow)
 └── README.md                     # Documentação completa da auditoria
 ```
 
@@ -69,11 +72,12 @@ cd auditoria-eleicoes-2026
 pip install -r requirements.txt
 ```
 
-### 3. Rodar os Pipelines de Dados (Opcional, bases já pré-processadas)
+### 3. Rodar os Pipelines de Dados & Carrossel (Opcional, bases já pré-processadas)
 ```bash
 python pipelines/extract_macro.py
 python pipelines/extract_media_audit.py
 python pipelines/duckdb_storage.py
+python pipelines/generate_carousel_images.py
 ```
 
 ### 4. Iniciar o Dashboard Streamlit
@@ -86,11 +90,12 @@ O dashboard será aberto no navegador em `http://localhost:8501`.
 
 ## 📊 Módulos do Dashboard Analítico
 
-1. **Auditoria de Mídia & Investigações:** Classificação por gravidade, cronologia 2018-2026 e fichas detalhadas dos fatos.
-2. **Séries Macroeconômicas:** Gráficos interativos em Plotly sobre Salário Real, Reservas Cambiais e Taxa de Desocupação por bloco de governo.
-3. **Matriz de Gestão de Risco:** Tabela analítica comparativa de previsibilidade vs. risco institucional.
-4. **Terminal SQL (DuckDB Live):** Console de execução de queries SQL em tempo real sobre as tabelas e views analíticas.
-5. **Repositório de Fontes:** Acesso aos documentos primários e ao agregador público de certidões.
+1. **Auditoria de Mídia & Investigações:** Classificação de 24 ocorrências por gravidade (1 a 5), cronologia 2018-2026, fichas detalhadas e links diretos para portais confiáveis (Poder360, Folha, Estadão, CNN Brasil - sem G1).
+2. **Séries Macroeconômicas (BACEN & IBGE):** Gráficos interativos sobre Salário Real (+84%), Reservas Cambiais (US$ 365 bi) e Desemprego (6,2%) por bloco de governo.
+3. **Matriz de Gestão de Risco:** Tabela analítica comparativa de previsibilidade socioeconômica vs. risco crônico institucional para o eleitor indeciso.
+4. **🚨 Ameaças à Democracia & Soberania (Módulo em Destaque):** Ataques às urnas eletrônicas (multa de R$ 22,9M do TSE ao PL), articulação de tarifas e sanções contra empresas do Brasil nos EUA, pressões contra o Pix gratuito e invasões do 8/1.
+5. **Terminal SQL (DuckDB Live):** Console de execução de queries SQL em tempo real sobre as tabelas e views analíticas colunares.
+6. **Repositório de Fontes & Documentos:** Acesso rápido aos documentos primários, inquéritos e ao agregador público de certidões.
 
 ---
 

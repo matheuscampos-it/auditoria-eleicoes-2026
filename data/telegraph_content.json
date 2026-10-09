@@ -1,0 +1,390 @@
+{
+  "path": "Auditoria-2026-Fontes-e-Documentos-Oficiais-10-09",
+  "url": "https://telegra.ph/Auditoria-2026-Fontes-e-Documentos-Oficiais-10-09",
+  "title": "Auditoria 2026: Fontes, Documentos e Código Aberto",
+  "description": "Hub unificado de dados abertos, código-fonte e documentos oficiais sobre as Eleições Presidenciais 2026 (Lula vs. Flávio Bolsonaro). Todos os dados são públicos, verificáveis e extraídos de bases primárias do Estado.\n🚀 REPOSITÓRIO OFICIAL NO GITHUB\nAudite você mesmo na sua própria máquina. Todo o código dos pipelines de dados, o banco analítico DuckDB e o dashboard interativo em Streamlit estão disponíveis publicamente:👉 https://github.com/matheuscampos-it/auditoria-eleicoes-2026\n1. Votações Parlamentares e…",
+  "author_name": "Matheus Campos (@matheuscampos-it)",
+  "author_url": "https://github.com/matheuscampos-it/auditoria-eleicoes-2026",
+  "content": [
+    {
+      "tag": "p",
+      "children": [
+        "Hub unificado de dados abertos, código-fonte e documentos oficiais sobre as Eleições Presidenciais 2026 (Lula vs. Flávio Bolsonaro). Todos os dados são públicos, verificáveis e extraídos de bases primárias do Estado."
+      ]
+    },
+    {
+      "tag": "hr"
+    },
+    {
+      "tag": "h3",
+      "attrs": {
+        "id": "🚀-REPOSITÓRIO-OFICIAL-NO-GITHUB"
+      },
+      "children": [
+        "🚀 REPOSITÓRIO OFICIAL NO GITHUB"
+      ]
+    },
+    {
+      "tag": "p",
+      "children": [
+        "Audite você mesmo na sua própria máquina. Todo o código dos pipelines de dados, o banco analítico DuckDB e o dashboard interativo em Streamlit estão disponíveis publicamente:",
+        {
+          "tag": "br"
+        },
+        {
+          "tag": "strong",
+          "children": [
+            "👉 "
+          ]
+        },
+        {
+          "tag": "a",
+          "attrs": {
+            "href": "https://github.com/matheuscampos-it/auditoria-eleicoes-2026",
+            "target": "_blank"
+          },
+          "children": [
+            "https://github.com/matheuscampos-it/auditoria-eleicoes-2026"
+          ]
+        }
+      ]
+    },
+    {
+      "tag": "hr"
+    },
+    {
+      "tag": "h4",
+      "attrs": {
+        "id": "1.-Votações-Parlamentares-e-Impacto-no-Bolso-(Senado-Federal)"
+      },
+      "children": [
+        "1. Votações Parlamentares e Impacto no Bolso (Senado Federal)"
+      ]
+    },
+    {
+      "tag": "ul",
+      "children": [
+        {
+          "tag": "li",
+          "children": [
+            {
+              "tag": "strong",
+              "children": [
+                "Privatização da Eletrobras (MP 1031/2021): "
+              ]
+            },
+            {
+              "tag": "a",
+              "attrs": {
+                "href": "https://www.poder360.com.br/congresso/saiba-como-votou-cada-senador-na-privatizacao-da-eletrobras/",
+                "target": "_blank"
+              },
+              "children": [
+                "Poder360 - Painel de Votação (Flávio votou SIM)"
+              ]
+            },
+            " / ",
+            {
+              "tag": "a",
+              "attrs": {
+                "href": "https://www25.senado.leg.br/web/atividade/materias/-/materia/148419",
+                "target": "_blank"
+              },
+              "children": [
+                "Senado Federal - Ficha da MP"
+              ]
+            }
+          ]
+        },
+        {
+          "tag": "li",
+          "children": [
+            {
+              "tag": "strong",
+              "children": [
+                "Política Permanente do Salário Mínimo (MP 1172/2023): "
+              ]
+            },
+            {
+              "tag": "a",
+              "attrs": {
+                "href": "https://www12.senado.leg.br/noticias/materias/2023/08/24/senado-aprova-mp-do-salario-minimo-com-correcao-do-ir-texto-vai-a-sancao",
+                "target": "_blank"
+              },
+              "children": [
+                "Agência Senado - Aprovação da Valorização pelo PIB+IPCA"
+              ]
+            }
+          ]
+        },
+        {
+          "tag": "li",
+          "children": [
+            {
+              "tag": "strong",
+              "children": [
+                "Teto de Gastos e Congelamento de Recursos: "
+              ]
+            },
+            {
+              "tag": "a",
+              "attrs": {
+                "href": "https://www.camara.leg.br/propostas-legislativas/2088351",
+                "target": "_blank"
+              },
+              "children": [
+                "Câmara dos Deputados - Histórico da EC 95/2016"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tag": "h4",
+      "attrs": {
+        "id": "2.-Evolução-Patrimonial-e-Movimentações-em-Espécie"
+      },
+      "children": [
+        "2. Evolução Patrimonial e Movimentações em Espécie"
+      ]
+    },
+    {
+      "tag": "ul",
+      "children": [
+        {
+          "tag": "li",
+          "children": [
+            {
+              "tag": "strong",
+              "children": [
+                "Mansão de R$ 6 milhões no Lago Sul: "
+              ]
+            },
+            {
+              "tag": "a",
+              "attrs": {
+                "href": "https://www.cnnbrasil.com.br/politica/flavio-bolsonaro-compra-mansao-avaliada-em-r-6-milhoes-em-brasilia/",
+                "target": "_blank"
+              },
+              "children": [
+                "CNN Brasil - Compra e Financiamento no BRB"
+              ]
+            }
+          ]
+        },
+        {
+          "tag": "li",
+          "children": [
+            {
+              "tag": "strong",
+              "children": [
+                "48 Depósitos Fracionados em Dinheiro Vivo: "
+              ]
+            },
+            {
+              "tag": "a",
+              "attrs": {
+                "href": "https://www1.folha.uol.com.br/poder/2019/01/coaf-aponta-48-depositos-suspeitos-na-conta-de-flavio-bolsonaro.shtml",
+                "target": "_blank"
+              },
+              "children": [
+                "Folha de S.Paulo / Coaf - 48 Depósitos Suspeitos"
+              ]
+            }
+          ]
+        },
+        {
+          "tag": "li",
+          "children": [
+            {
+              "tag": "strong",
+              "children": [
+                "Loja de Chocolates e Lavagem de Capitais: "
+              ]
+            },
+            {
+              "tag": "a",
+              "attrs": {
+                "href": "https://www.estadao.com.br/politica/investigacao-apura-se-loja-de-flavio-bolsonaro-lavou-r-2-1-milhoes/",
+                "target": "_blank"
+              },
+              "children": [
+                "Estadão / MP-RJ - Perícia Contábil da Franquia"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tag": "h4",
+      "attrs": {
+        "id": "3.-Aparelhamento-de-Órgãos-de-Estado-(Abin-Paralela)"
+      },
+      "children": [
+        "3. Aparelhamento de Órgãos de Estado (Abin Paralela)"
+      ]
+    },
+    {
+      "tag": "ul",
+      "children": [
+        {
+          "tag": "li",
+          "children": [
+            {
+              "tag": "strong",
+              "children": [
+                "Inquérito da Polícia Federal no STF: "
+              ]
+            },
+            {
+              "tag": "a",
+              "attrs": {
+                "href": "https://www.poder360.com.br/poder-justica/abin-atuou-ilegalmente-em-favor-de-renan-e-flavio-bolsonaro-diz-pf/",
+                "target": "_blank"
+              },
+              "children": [
+                "Poder360 / PF - Relatórios Secretos em Prol de Flávio"
+              ]
+            }
+          ]
+        },
+        {
+          "tag": "li",
+          "children": [
+            {
+              "tag": "strong",
+              "children": [
+                "Áudio de Reunião no Palácio do Planalto: "
+              ]
+            },
+            {
+              "tag": "a",
+              "attrs": {
+                "href": "https://www.cnnbrasil.com.br/politica/audio-gravado-por-ramagem-mostra-plano-para-blindar-flavio-bolsonaro-diz-pf/",
+                "target": "_blank"
+              },
+              "children": [
+                "CNN Brasil - Gravação Apreendida pela PF"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tag": "h4",
+      "attrs": {
+        "id": "4.-Instabilidade-Institucional-e-Conflitos"
+      },
+      "children": [
+        "4. Instabilidade Institucional e Conflitos"
+      ]
+    },
+    {
+      "tag": "ul",
+      "children": [
+        {
+          "tag": "li",
+          "children": [
+            {
+              "tag": "strong",
+              "children": [
+                "Multa de R$ 22,9 Milhões pelo TSE: "
+              ]
+            },
+            {
+              "tag": "a",
+              "attrs": {
+                "href": "https://www.tse.jus.br/comunicacao/noticias/2022/Novembro/tse-multa-coligacao-em-r-22-9-milhoes-por-litigancia-de-ma-fe",
+                "target": "_blank"
+              },
+              "children": [
+                "Portal Oficial do TSE - Acórdão"
+              ]
+            }
+          ]
+        },
+        {
+          "tag": "li",
+          "children": [
+            {
+              "tag": "strong",
+              "children": [
+                "PEC das Praias (PEC 3/2022): "
+              ]
+            },
+            {
+              "tag": "a",
+              "attrs": {
+                "href": "https://www12.senado.leg.br/noticias/materias/2024/05/27/pec-dos-terrenos-de-marinha-gera-debate-sobre-privatizacao-de-praias",
+                "target": "_blank"
+              },
+              "children": [
+                "Agência Senado - Relatoria de Flávio"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tag": "h4",
+      "attrs": {
+        "id": "5.-Séries-Históricas-Oficiais-da-Economia-(Gestão-Lula)"
+      },
+      "children": [
+        "5. Séries Históricas Oficiais da Economia (Gestão Lula)"
+      ]
+    },
+    {
+      "tag": "ul",
+      "children": [
+        {
+          "tag": "li",
+          "children": [
+            {
+              "tag": "strong",
+              "children": [
+                "Banco Central do Brasil (SGS): "
+              ]
+            },
+            {
+              "tag": "a",
+              "attrs": {
+                "href": "https://www.bcb.gov.br/",
+                "target": "_blank"
+              },
+              "children": [
+                "Série 3546 (Reservas US$ 365 Bi) e Série 1619 (Salário Mínimo)"
+              ]
+            }
+          ]
+        },
+        {
+          "tag": "li",
+          "children": [
+            {
+              "tag": "strong",
+              "children": [
+                "IBGE (PNAD Contínua): "
+              ]
+            },
+            {
+              "tag": "a",
+              "attrs": {
+                "href": "https://agenciadenoticias.ibge.gov.br/",
+                "target": "_blank"
+              },
+              "children": [
+                "Taxa de Desocupação Histórica (6,2%)"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "views": 22
+}
