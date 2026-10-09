@@ -1,18 +1,23 @@
 # ⚖️ Auditoria de Dados: Eleições Presidenciais 2026 (Lula vs. Flávio Bolsonaro)
 
-Projeto de código aberto e jornalismo de dados desenvolvido para auditar empiricamente a trajetória e os fatos dos dois candidatos que disputam o segundo turno das eleições presidenciais de 2026: **Luiz Inácio Lula da Silva** e **Flávio Bolsonaro**.
-
-O projeto apoia a produção de um vídeo para o YouTube fundamentado em **dois pilares analíticos**:
-1. **Pilar 1: Dados Confiáveis & Governança Macroeconômica (Gestão Lula)** — Séries temporais oficiais de 2002 a 2026 comprovando ganho real do salário mínimo, blindagem externa de reservas cambiais, queda do desemprego e combate à desigualdade.
-2. **Pilar 2: Auditoria de Mídia & Risco Institucional (Flávio Bolsonaro, PL e Clã)** — Mineração de dados e Processamento de Linguagem Natural (NLP) categorizando o padrão crônico de crises: discurso antidemocrático, investigações criminais (rachadinhas/patrimônio) e contradições parlamentares no Senado.
+Repositório de código aberto e jornalismo de dados desenvolvido para auditar empiricamente a trajetória, as votações legislativas e os indicadores econômicos dos dois principais concorrentes no segundo turno das eleições presidenciais de 2026: **Luiz Inácio Lula da Silva** e **Flávio Bolsonaro**.
 
 ---
 
-## 🎯 Objetivo de Comunicação
+## 🎯 Pilares da Auditoria
 
-Fornecer ao eleitor indeciso uma ferramenta racional e transparente de tomada de decisão. O contraste demonstrado no código não é ideológico abstrato, mas de **gestão de risco**:
-* De um lado, a **previsibilidade socioeconômica** comprovada por dados oficiais irrefutáveis.
-* Do outro lado, o **risco institucional e a instabilidade crônica** evidenciados por anos de investigações e votos contrários à renda do trabalhador.
+1. **Governança Macroeconômica & Séries Temporais Oficiais (Gestão Lula):**  
+   Extração direta de séries temporais oficiais do **Banco Central do Brasil (BACEN SGS)** e **IBGE (SIDRA/PNAD)** de 2002 a 2026, comprovando:
+   - Ganho real de **+84%** no poder de compra do salário mínimo (deflacionado pelo IPCA).
+   - Acúmulo de mais de **US$ 365 bilhões** em reservas cambiais internacionais.
+   - Taxa de desocupação (desemprego) em **6,2%**, próximas das mínimas históricas.
+
+2. **Auditoria de Mídia, Notícias & Investigações (Flávio Bolsonaro & PL):**  
+   Base analítica e Processamento de Linguagem Natural (NLP) categorizando eventos factualizados em fontes primárias:
+   - **Votações Nominais no Senado:** Voto formal contra a política de valorização permanente do salário mínimo e voto a favor da MP da Eletrobras com jabutis tarifários.
+   - **Inteligência Financeira (Coaf):** 48 depósitos fracionados de R$ 2.000 em dinheiro vivo e compra de mansão de R$ 6 milhões no Lago Sul com renda parlamentar.
+   - **Inquérito Policial (PF/STF):** Uso indevido da Abin paralela para confecção de relatórios sigilosos de blindagem privada.
+   - **Tribunais Eleitorais (TSE):** Multa de R$ 22,9 milhões ao PL por litigância de má-fé contra as urnas eletrônicas.
 
 ---
 
@@ -21,26 +26,29 @@ Fornecer ao eleitor indeciso uma ferramenta racional e transparente de tomada de
 ```text
 Projeto Outubro/
 ├── app/
-│   └── main.py                   # Dashboard interativo completo em Streamlit
+│   └── main.py                   # Dashboard interativo analítico em Streamlit
 ├── data/
-│   ├── database.duckdb           # Banco analítico local de alta velocidade
-│   ├── macro_series_historica.csv # Séries temporais BACEN/IBGE/IPEA (2002-2026)
-│   └── media_audit_dataset.csv   # Base categorizada de investigações e notícias
+│   ├── database.duckdb           # Banco analítico colunar local de alta velocidade
+│   ├── macro_series_historica.csv # Séries temporais BACEN/IBGE (2002-2026)
+│   ├── macro_series_historica.json
+│   ├── media_audit_dataset.csv   # Base categorizada de investigações e notícias
+│   └── media_audit_dataset.json
 ├── pipelines/
-│   ├── extract_macro.py          # Pipeline de extração e consolidação macroeconômica
-│   ├── extract_media_audit.py    # Pipeline de mineração e classificação léxica (NLP)
+│   ├── extract_macro.py          # Extração e consolidação macroeconômica
+│   ├── extract_media_audit.py    # Classificação léxica e enriquecimento de notícias
 │   └── duckdb_storage.py         # Ingestão e criação de views analíticas SQL no DuckDB
 ├── requirements.txt              # Dependências Python (Streamlit, Plotly, DuckDB, Pandas)
-└── README.md                     # Documentação completa
+└── README.md                     # Documentação completa da auditoria
 ```
 
 ---
 
 ## 🚀 Como Executar Localmente
 
-### 1. Clonar ou Acessar a Pasta do Projeto
+### 1. Clonar o Repositório
 ```bash
-cd "c:\Projeto Outubro"
+git clone https://github.com/matheuscampos-it/auditoria-eleicoes-2026.git
+cd auditoria-eleicoes-2026
 ```
 
 ### 2. Instalar as Dependências
@@ -48,42 +56,37 @@ cd "c:\Projeto Outubro"
 pip install -r requirements.txt
 ```
 
-### 3. Rodar os Pipelines de Dados (Opcional, já pré-processados)
+### 3. Rodar os Pipelines de Dados (Opcional, bases já pré-processadas)
 ```bash
 python pipelines/extract_macro.py
 python pipelines/extract_media_audit.py
 python pipelines/duckdb_storage.py
 ```
 
-### 4. Iniciar o Dashboard Interativo
+### 4. Iniciar o Dashboard Streamlit
 ```bash
 python -m streamlit run app/main.py
 ```
-O dashboard será aberto automaticamente no navegador em `http://localhost:8501`.
+O dashboard será aberto no navegador em `http://localhost:8501`.
 
 ---
 
-## 📊 O Que o Dashboard Oferece
+## 📊 Módulos do Dashboard Analítico
 
-1. **Aba 1 - Economia & Governança (Lula):**  
-   - Ganho real de **+84%** no poder de compra do salário mínimo deflacionado pelo IPCA.  
-   - Evolução das reservas cambiais de **US$ 37 bilhões para mais de US$ 360 bilhões**.  
-   - Desemprego nas mínimas históricas e menor índice de Gini registrado.
-2. **Aba 2 - Auditoria de Mídia (Flávio Bolsonaro / PL):**  
-   - Classificação em 3 categorias críticas: *Investigações & Abuso de Poder*, *Risco Institucional & Golpismo* e *Contradições Parlamentares*.  
-   - Detalhamento de cada episódio com resumo factual, veículo de imprensa e impacto direto para a vida do eleitor.
-3. **Aba 3 - Raio-X do Eleitor Indeciso:**  
-   - Tabela comparativa e Simulador Interativo com pesos personalizáveis.
-4. **Aba 4 - Roteiro Completo para Gravação:**  
-   - Script dividido em 5 blocos com minutagem, instruções de tela e falas-chave de alta retenção.
-5. **Aba 5 - Terminal SQL (DuckDB Live):**  
-   - Console interativo para executar queries SQL ao vivo durante o vídeo.
+1. **Auditoria de Mídia & Investigações:** Classificação por gravidade, cronologia 2018-2026 e fichas detalhadas dos fatos.
+2. **Séries Macroeconômicas:** Gráficos interativos em Plotly sobre Salário Real, Reservas Cambiais e Taxa de Desocupação por bloco de governo.
+3. **Matriz de Gestão de Risco:** Tabela analítica comparativa de previsibilidade vs. risco institucional.
+4. **Terminal SQL (DuckDB Live):** Console de execução de queries SQL em tempo real sobre as tabelas e views analíticas.
+5. **Repositório de Fontes:** Acesso aos documentos primários e ao agregador público de certidões.
 
 ---
 
-## 🛡️ Fontes Oficiais Utilizadas
+## 🛡️ Fontes Primárias e Documentos Oficiais
 
 - **Banco Central do Brasil (BACEN):** Sistema Gerenciador de Séries Temporais (SGS) - Séries 3546, 1619, 433, 432.
-- **IBGE:** Séries históricas de desocupação (PNAD Contínua) e Índice de Gini.
-- **Senado Federal & TSE:** Votações nominais no painel eletrônico e registros públicos de ações judiciais.
-- **Ministério Público do Estado do Rio de Janeiro (MP-RJ) & Polícia Federal:** Inquéritos e denúncias documentadas.
+- **IBGE:** Pesquisa Nacional por Amostra de Domicílios Contínua (PNAD Contínua) e Séries SIDRA.
+- **Senado Federal:** Registros nominais de votações em [legis.senado.leg.br](https://legis.senado.leg.br).
+- **Tribunal Superior Eleitoral (TSE):** Acórdão de aplicação de multa à coligação do PL.
+- **Polícia Federal / STF:** Inquérito da Operação Vigilância Aproximada (Abin Paralela).
+- **Conselho de Controle de Atividades Financeiras (Coaf):** Relatórios de Inteligência Financeira (RIF).
+- **Agregador Público Oficial de Fontes:** [https://telegra.ph/Auditoria-2026-Fontes-e-Documentos-Oficiais-10-09](https://telegra.ph/Auditoria-2026-Fontes-e-Documentos-Oficiais-10-09)
