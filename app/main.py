@@ -286,7 +286,7 @@ elif view_mode == "📊 Séries Macroeconômicas (BACEN & IBGE)":
         fig_res = px.area(
             df_macro,
             x="ano",
-            y="reservas_internacionais_usd_bi",
+            y="reservas_usd_bi",
             color="bloco_politico",
             title="Reservas Internacionais em Moeda Forte (US$ Bilhões)",
             color_discrete_map={
@@ -335,14 +335,51 @@ elif view_mode == "⚖️ Matriz de Gestão de Risco (Indecisos)":
     """, unsafe_allow_html=True)
     
     st.markdown("""
-    | Eixo de Auditoria | Gestão Lula (Histórico Comprovado) | Flávio Bolsonaro & PL (Ações Documentadas) | A Decisão Lógica |
-    | :--- | :--- | :--- | :--- |
-    | **Seu Salário e Poder de Compra** | Ganho real de +84% no período histórico; volta da valorização PIB + IPCA em 2023. | **Votou CONTRA** a política permanente de valorização do mínimo no Senado. | Lula garante poder de compra; Flávio votou contra. |
-    | **Transparência e Dinheiro Público** | Portal da Transparência, órgãos de controle autônomos. | 48 depósitos em dinheiro vivo de R$ 2 mil, mansão de R$ 6M e caso Queiroz. | Risco crônico de desvio e apropriação indevida. |
-    | **Uso da Polícia e da Inteligência** | Fortalecimento técnico da PF sem interferência em inquéritos de ministros. | **Abin paralela** usada ilegalmente para blindar a família de processos. | Aparelhamento inaceitável de agências de inteligência. |
-    | **Estabilidade das Leis e Democracia** | Condução democrática, transição pacífica e diálogo com todos os poderes. | Multa de R$ 22,9M por atacar urnas, discursos golpistas e PEC das Praias. | Risco de isolamento internacional e crises diárias. |
-    | **Conta de Luz e Tarifas Públicas** | Luz para Todos, defesa de modicidade tarifária estatal. | Voto a favor da privatização da Eletrobras com jabutis que subiram as tarifas. | Lula protege tarifas populares; Flávio encareceu. |
-    """)
+    <div style="overflow-x: auto; margin-top: 15px;">
+    <table style="width: 100%; border-collapse: collapse; background-color: #161b22; border-radius: 10px; overflow: hidden; border: 1px solid #30363d; font-size: 0.95rem;">
+        <thead>
+            <tr style="background-color: #21262d; border-bottom: 2px solid #30363d; text-align: left;">
+                <th style="padding: 14px 16px; color: #58a6ff; font-weight: 700; text-transform: uppercase;">Eixo de Auditoria</th>
+                <th style="padding: 14px 16px; color: #3fb950; font-weight: 700; text-transform: uppercase;">Gestão Lula (Fatos Comprovados)</th>
+                <th style="padding: 14px 16px; color: #f85149; font-weight: 700; text-transform: uppercase;">Flávio Bolsonaro & PL (Ações Reais)</th>
+                <th style="padding: 14px 16px; color: #d29922; font-weight: 700; text-transform: uppercase;">A Decisão Lógica</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr style="border-bottom: 1px solid #21262d;">
+                <td style="padding: 14px 16px; font-weight: 600; color: #e6edf3;">Seu Salário e Poder de Compra</td>
+                <td style="padding: 14px 16px; color: #c9d1d9;">Ganho real de +84% no período histórico; fórmula de valorização real (PIB + IPCA).</td>
+                <td style="padding: 14px 16px; color: #c9d1d9;"><b style="color: #ff7b72;">Votou CONTRA</b> a política permanente de valorização do salário mínimo no Senado.</td>
+                <td style="padding: 14px 16px; color: #7ee787; font-weight: 600;">Lula garante aumento real; Flávio votou contra.</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #21262d; background-color: #0d1117;">
+                <td style="padding: 14px 16px; font-weight: 600; color: #e6edf3;">Transparência e Dinheiro Público</td>
+                <td style="padding: 14px 16px; color: #c9d1d9;">Criação do Portal da Transparência e fortalecimento de órgãos de controle autônomos.</td>
+                <td style="padding: 14px 16px; color: #c9d1d9;"><b style="color: #ff7b72;">48 depósitos em dinheiro vivo</b> de R$ 2 mil, mansão de R$ 6M e caso Queiroz.</td>
+                <td style="padding: 14px 16px; color: #ffa657; font-weight: 600;">Risco crônico de desvio e apropriação indevida.</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #21262d;">
+                <td style="padding: 14px 16px; font-weight: 600; color: #e6edf3;">Uso da Polícia e da Inteligência</td>
+                <td style="padding: 14px 16px; color: #c9d1d9;">Fortalecimento técnico da PF sem interferência política em inquéritos ministeriais.</td>
+                <td style="padding: 14px 16px; color: #c9d1d9;"><b style="color: #ff7b72;">Abin paralela</b> usada ilegalmente para espionar e blindar a família de processos.</td>
+                <td style="padding: 14px 16px; color: #ff7b72; font-weight: 600;">Aparelhamento inaceitável de órgãos de Estado.</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #21262d; background-color: #0d1117;">
+                <td style="padding: 14px 16px; font-weight: 600; color: #e6edf3;">Estabilidade das Leis e Democracia</td>
+                <td style="padding: 14px 16px; color: #c9d1d9;">Condução democrática, transição pacífica e diálogo institucional com os Poderes.</td>
+                <td style="padding: 14px 16px; color: #c9d1d9;"><b style="color: #ff7b72;">Multa de R$ 22,9M</b> por atacar urnas, discursos golpistas e PEC das Praias.</td>
+                <td style="padding: 14px 16px; color: #ffa657; font-weight: 600;">Risco crônico de isolamento e crises diárias.</td>
+            </tr>
+            <tr>
+                <td style="padding: 14px 16px; font-weight: 600; color: #e6edf3;">Conta de Luz e Tarifas Públicas</td>
+                <td style="padding: 14px 16px; color: #c9d1d9;">Luz para Todos, defesa de modicidade tarifária estatal e subsídios para baixa renda.</td>
+                <td style="padding: 14px 16px; color: #c9d1d9;"><b style="color: #ff7b72;">Votou SIM</b> pela privatização da Eletrobras com jabutis que encareceram a energia.</td>
+                <td style="padding: 14px 16px; color: #7ee787; font-weight: 600;">Lula protege tarifas populares; Flávio encareceu.</td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+    """, unsafe_allow_html=True)
 
 # ==============================================================================
 # 4. TERMINAL SQL ANALÍTICO (DUCKDB LIVE)
