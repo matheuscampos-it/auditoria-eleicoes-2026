@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auditoria 2026 | Hub Oficial de Links & Dados</title>
+    <meta name="description" content="Hub unificado com código-fonte no GitHub, banco analítico DuckDB, inquéritos e fontes oficiais sobre as Eleições 2026.">
+    <link rel="icon" href="https://img.icons8.com/color/96/database.png">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        body {
+            background-color: #0d1117;
+            color: #c9d1d9;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+        }
+        .container {
+            width: 100%;
+            max-width: 560px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .avatar-wrap {
+            position: relative;
+            margin-bottom: 16px;
+        }
+        .avatar {
+            width: 96px;
+            height: 96px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1f6feb 0%, #238636 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 42px;
+            box-shadow: 0 0 24px rgba(31, 111, 235, 0.4);
+            border: 3px solid #30363d;
+        }
+        .verified-badge {
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            background: #238636;
+            color: white;
+            border-radius: 50%;
+            width: 26px;
+            height: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            border: 2px solid #0d1117;
+        }
+        h1 {
+            font-size: 1.5rem;
+            color: #f0f6fc;
+            font-weight: 700;
+            margin-bottom: 6px;
+            text-align: center;
+        }
+        .handle {
+            color: #58a6ff;
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            text-decoration: none;
+        }
+        .handle:hover {
+            text-decoration: underline;
+        }
+        .bio {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #8b949e;
+            text-align: center;
+            margin-bottom: 28px;
+            padding: 0 10px;
+        }
+        .links-group {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        .link-card {
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 18px 20px;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #f0f6fc;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .link-card:hover {
+            transform: translateY(-2px);
+            border-color: #58a6ff;
+            background-color: #1c2128;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+        }
+        .link-card.primary {
+            border-color: #238636;
+            background: linear-gradient(135deg, #161b22 0%, #11261a 100%);
+        }
+        .link-card.primary:hover {
+            border-color: #2ea043;
+            box-shadow: 0 6px 20px rgba(46, 160, 67, 0.25);
+        }
+        .link-card.telegraph {
+            border-color: #1f6feb;
+            background: linear-gradient(135deg, #161b22 0%, #102038 100%);
+        }
+        .link-card.telegraph:hover {
+            border-color: #388bfd;
+            box-shadow: 0 6px 20px rgba(56, 139, 253, 0.25);
+        }
+        .link-icon {
+            font-size: 26px;
+            margin-right: 16px;
+            flex-shrink: 0;
+        }
+        .link-text {
+            flex-grow: 1;
+        }
+        .link-title {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 3px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .link-desc {
+            font-size: 0.82rem;
+            color: #8b949e;
+            line-height: 1.35;
+        }
+        .link-arrow {
+            color: #8b949e;
+            font-size: 18px;
+            margin-left: 10px;
+            transition: transform 0.2s;
+        }
+        .link-card:hover .link-arrow {
+            transform: translateX(4px);
+            color: #58a6ff;
+        }
+        .section-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #8b949e;
+            margin: 18px 0 6px 8px;
+            font-weight: 700;
+        }
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            color: #484f58;
+            font-size: 0.82rem;
+            line-height: 1.5;
+        }
+        footer a {
+            color: #58a6ff;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Perfil / Avatar -->
+        <div class="avatar-wrap">
+            <div class="avatar">⚖️</div>
+            <div class="verified-badge">✓</div>
+        </div>
+        
+        <h1>Auditoria de Dados 2026</h1>
+        <a href="https://github.com/matheuscampos-it" target="_blank" class="handle">@matheuscampos-it</a>
+        
+        <p class="bio">
+            Plataforma independente de jornalismo de dados e código aberto. Séries temporais oficiais, NLP de notícias e banco DuckDB para o 2º Turno.
+        </p>
+
+        <!-- Links Principais -->
+        <div class="links-group">
+            
+            <div class="section-label">Hub Central & Código</div>
+            
+            <!-- Link 1: Repositório GitHub -->
+            <a href="https://github.com/matheuscampos-it/auditoria-eleicoes-2026" target="_blank" class="link-card primary">
+                <div class="link-icon">💻</div>
+                <div class="link-text">
+                    <div class="link-title">Repositório Oficial no GitHub</div>
+                    <div class="link-desc">Código Python, banco DuckDB, datasets e documentação 100% aberta.</div>
+                </div>
+                <div class="link-arrow">→</div>
+            </a>
+
+            <!-- Link 2: Dossiê Completo Telegraph -->
+            <a href="https://telegra.ph/Auditoria-2026-Fontes-e-Documentos-Oficiais-10-09" target="_blank" class="link-card telegraph">
+                <div class="link-icon">📑</div>
+                <div class="link-text">
+                    <div class="link-title">Dossiê de Fontes & Certidões (Telegraph)</div>
+                    <div class="link-desc">Página pública gratuita com todos os links diretos para tribunais e notícias.</div>
+                </div>
+                <div class="link-arrow">→</div>
+            </a>
+
+            <div class="section-label">Documentos Primários & Provas Oficiais</div>
+
+            <!-- Link 3: Votações Senado -->
+            <a href="https://www.poder360.com.br/congresso/saiba-como-votou-cada-senador-na-privatizacao-da-eletrobras/" target="_blank" class="link-card">
+                <div class="link-icon">🏛️</div>
+                <div class="link-text">
+                    <div class="link-title">Votações Nominais no Senado</div>
+                    <div class="link-desc">Painel oficial: votos contra o Salário Mínimo e privatização da Eletrobras.</div>
+                </div>
+                <div class="link-arrow">→</div>
+            </a>
+
+            <!-- Link 4: Abin Paralela / STF -->
+            <a href="https://g1.globo.com/politica/noticia/2024/01/25/pf-diz-que-abin-paralela-foi-usada-para-ajudar-na-defesa-de-flavio-bolsonaro.ghtml" target="_blank" class="link-card">
+                <div class="link-icon">🕵️‍♂️</div>
+                <div class="link-text">
+                    <div class="link-title">Inquérito da Abin Paralela (PF / STF)</div>
+                    <div class="link-desc">Operação Vigilância Aproximada: relatórios secretos em prol de Flávio.</div>
+                </div>
+                <div class="link-arrow">→</div>
+            </a>
+
+            <!-- Link 5: Mansão & Coaf -->
+            <a href="https://g1.globo.com/jornal-nacional/noticia/2019/01/18/coaf-aponta-48-depositos-em-dinheiro-vivo-em-conta-de-flavio-bolsonaro.ghtml" target="_blank" class="link-card">
+                <div class="link-icon">💰</div>
+                <div class="link-text">
+                    <div class="link-title">Relatório do Coaf: 48 Depósitos em Espécie</div>
+                    <div class="link-desc">Movimentações fracionadas em caixas da Alerj e mansão de R$ 6M.</div>
+                </div>
+                <div class="link-arrow">→</div>
+            </a>
+
+            <!-- Link 6: Multa TSE -->
+            <a href="https://www.tse.jus.br/comunicacao/noticias/2022/Novembro/tse-multa-coligacao-em-r-22-9-milhoes-por-litigancia-de-ma-fe" target="_blank" class="link-card">
+                <div class="link-icon">⚖️</div>
+                <div class="link-text">
+                    <div class="link-title">Acórdão Oficial do TSE: Multa de R$ 22,9M</div>
+                    <div class="link-desc">Condenação da coligação do PL por contestar urnas sem provas técnicas.</div>
+                </div>
+                <div class="link-arrow">→</div>
+            </a>
+
+            <!-- Link 7: Séries BACEN -->
+            <a href="https://www.bcb.gov.br/" target="_blank" class="link-card">
+                <div class="link-icon">📈</div>
+                <div class="link-text">
+                    <div class="link-title">Séries Oficiais do Banco Central & IBGE</div>
+                    <div class="link-desc">SGS Séries 3546 (Reservas US$ 365 Bi) e 1619 (Salário Real +84%).</div>
+                </div>
+                <div class="link-arrow">→</div>
+            </a>
+
+        </div>
+
+        <footer>
+            <p>Projeto de Código Aberto • 100% Baseado em Dados Públicos</p>
+            <p style="margin-top: 6px;">Desenvolvido por <a href="https://github.com/matheuscampos-it" target="_blank">Matheus Campos</a></p>
+        </footer>
+    </div>
+</body>
+</html>
