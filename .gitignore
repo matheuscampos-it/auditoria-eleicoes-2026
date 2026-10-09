@@ -6,7 +6,5 @@ __pycache__/
 env/
 venv/
 .streamlit/
-carousel_images/
-pipelines/generate_carousel_images.py
 data/telegraph_content.json
 
