@@ -52,7 +52,8 @@ Projeto Outubro/
 │   ├── extract_macro.py          # Extração e consolidação macroeconômica
 │   ├── extract_media_audit.py    # Classificação léxica, fontes diretas e enriquecimento de notícias
 │   ├── duckdb_storage.py         # Ingestão e criação de views analíticas SQL no DuckDB
-│   └── generate_carousel_images.py # Renderizador visual em lote dos 10 slides do Instagram
+│   ├── generate_carousel_images.py # Renderizador visual em lote dos 10 slides do Instagram
+│   └── publish_telegraph.py      # Atualizador e publicador automatizado do dossiê no Telegraph
 ├── requirements.txt              # Dependências Python (Streamlit, Plotly, DuckDB, Pandas, Pillow)
 └── README.md                     # Documentação completa da auditoria
 ```
