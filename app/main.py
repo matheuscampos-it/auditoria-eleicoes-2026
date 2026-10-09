@@ -444,9 +444,11 @@ elif view_mode == "🌐 Repositório de Fontes & Documentos":
     """, unsafe_allow_html=True)
     
     st.success("""
+    📊 **Dashboard Web Live (GitHub Pages - sem instalação):**  
+    👉 [https://matheuscampos-it.github.io/auditoria-eleicoes-2026/dashboard.html](https://matheuscampos-it.github.io/auditoria-eleicoes-2026/dashboard.html)
+
     🔗 **Linktree Oficial (Hub Unificado de Links):**  
     👉 [https://matheuscampos-it.github.io/auditoria-eleicoes-2026/](https://matheuscampos-it.github.io/auditoria-eleicoes-2026/)  
-    *(Página de links no ar reunindo GitHub, Dossiê Telegraph e documentos oficiais)*
     
     📑 **Dossiê no Telegraph com todas as certidões:**  
     👉 [https://telegra.ph/Auditoria-2026-Fontes-e-Documentos-Oficiais-10-09](https://telegra.ph/Auditoria-2026-Fontes-e-Documentos-Oficiais-10-09)  

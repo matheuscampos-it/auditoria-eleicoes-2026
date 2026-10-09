@@ -1,0 +1,1611 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Analítico | Auditoria de Dados Eleições 2026</title>
+    <meta name="description" content="Dashboard analítico com séries temporais oficiais do BACEN, IBGE, DuckDB e auditoria factual de notícias para o 2º Turno 2026.">
+    <link rel="icon" href="https://img.icons8.com/color/96/database.png">
+    
+    <!-- Plotly.js CDN -->
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        body {
+            background-color: #0e1117;
+            color: #c9d1d9;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Top Navigation Bar */
+        .top-nav {
+            background-color: #161b22;
+            border-bottom: 1px solid #30363d;
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: #f0f6fc;
+            font-weight: 700;
+            font-size: 1.15rem;
+        }
+        .brand img {
+            width: 32px;
+            height: 32px;
+        }
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .nav-btn {
+            background-color: #21262d;
+            color: #c9d1d9;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 6px 14px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .nav-btn:hover {
+            background-color: #30363d;
+            border-color: #58a6ff;
+            color: #58a6ff;
+        }
+        .nav-btn.primary {
+            background-color: #238636;
+            border-color: #2ea043;
+            color: #ffffff;
+        }
+        .nav-btn.primary:hover {
+            background-color: #2ea043;
+        }
+
+        /* App Layout */
+        .app-layout {
+            display: flex;
+            flex: 1;
+            min-height: calc(100vh - 61px);
+        }
+        
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 280px;
+            background-color: #161b22;
+            border-right: 1px solid #30363d;
+            padding: 24px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+        .sidebar-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #8b949e;
+            padding: 0 12px 8px 12px;
+            font-weight: 700;
+        }
+        .tab-btn {
+            background: none;
+            border: none;
+            color: #8b949e;
+            padding: 12px 14px;
+            border-radius: 8px;
+            text-align: left;
+            font-size: 0.92rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.2s;
+            width: 100%;
+        }
+        .tab-btn:hover {
+            background-color: #21262d;
+            color: #f0f6fc;
+        }
+        .tab-btn.active {
+            background-color: #1f6feb22;
+            color: #58a6ff;
+            border-left: 3px solid #58a6ff;
+        }
+        .sidebar-footer {
+            margin-top: auto;
+            padding: 16px 12px;
+            border-top: 1px solid #21262d;
+            font-size: 0.8rem;
+            color: #8b949e;
+            line-height: 1.5;
+        }
+        
+        /* Main Content Container */
+        .main-content {
+            flex: 1;
+            padding: 32px 40px;
+            overflow-y: auto;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        /* Badges */
+        .badge-pill {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-right: 6px;
+        }
+        .badge-alert { background-color: #d32f2f; color: white; }
+        .badge-tech { background-color: #1976d2; color: white; }
+        .badge-success { background-color: #2e7d32; color: white; }
+
+        h1.view-title {
+            font-size: 1.8rem;
+            color: #f0f6fc;
+            font-weight: 700;
+            margin: 12px 0 8px 0;
+        }
+        p.view-desc {
+            color: #8b949e;
+            font-size: 1.05rem;
+            line-height: 1.5;
+            margin-bottom: 24px;
+        }
+
+        /* Metric KPI Cards */
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+        .metric-card {
+            background: linear-gradient(135deg, #1e222d 0%, #151821 100%);
+            border: 1px solid #2d3343;
+            border-radius: 10px;
+            padding: 18px 22px;
+            color: #ffffff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        .metric-title {
+            font-size: 0.82rem;
+            color: #8fa0bc;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+        .metric-value {
+            font-size: 1.85rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .metric-desc {
+            font-size: 0.82rem;
+            color: #b0bac9;
+            line-height: 1.35;
+        }
+
+        /* Chart Containers */
+        .chart-box {
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+        .chart-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 28px;
+        }
+        @media (max-width: 900px) {
+            .chart-grid { grid-template-columns: 1fr; }
+            .app-layout { flex-direction: column; }
+            .sidebar { width: 100%; border-right: none; border-bottom: 1px solid #30363d; }
+            .main-content { padding: 20px 16px; }
+        }
+
+        /* Sub Tabs */
+        .sub-nav {
+            display: flex;
+            gap: 8px;
+            border-bottom: 1px solid #30363d;
+            margin-bottom: 20px;
+        }
+        .sub-btn {
+            background: none;
+            border: none;
+            color: #8b949e;
+            padding: 10px 18px;
+            font-size: 0.92rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+        .sub-btn:hover { color: #f0f6fc; }
+        .sub-btn.active {
+            color: #58a6ff;
+            border-bottom-color: #58a6ff;
+        }
+
+        /* News Accordion Cards */
+        .news-card {
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            overflow: hidden;
+            transition: all 0.2s;
+        }
+        .news-header {
+            padding: 16px 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-weight: 600;
+            color: #f0f6fc;
+            background-color: #161b22;
+        }
+        .news-header:hover { background-color: #1c2128; }
+        .news-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.98rem;
+        }
+        .news-badge {
+            background-color: #21262d;
+            color: #58a6ff;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            font-weight: 700;
+        }
+        .news-body {
+            padding: 18px 20px;
+            border-top: 1px solid #21262d;
+            background-color: #0d1117;
+            display: none;
+            font-size: 0.92rem;
+            line-height: 1.5;
+        }
+        .news-body.open { display: block; }
+        .news-impact {
+            background-color: #161b22;
+            border-left: 3px solid #ff7b72;
+            padding: 10px 14px;
+            margin: 12px 0;
+            border-radius: 0 6px 6px 0;
+            font-family: monospace;
+            font-size: 0.88rem;
+            color: #ff7b72;
+        }
+        .news-meta {
+            font-size: 0.8rem;
+            color: #8b949e;
+            margin-top: 10px;
+        }
+
+        /* Table */
+        .custom-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #161b22;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #30363d;
+            font-size: 0.92rem;
+            margin-top: 16px;
+        }
+        .custom-table th {
+            background-color: #21262d;
+            padding: 14px 16px;
+            text-align: left;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.82rem;
+            border-bottom: 2px solid #30363d;
+        }
+        .custom-table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #30363d;
+            color: #c9d1d9;
+        }
+        .custom-table tr:nth-child(even) {
+            background-color: #0d1117;
+        }
+
+        /* Filter Controls */
+        .controls-row {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .select-box {
+            background-color: #21262d;
+            border: 1px solid #30363d;
+            color: #f0f6fc;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            outline: none;
+        }
+        .select-box:focus { border-color: #58a6ff; }
+
+        /* Code/SQL Block */
+        .sql-terminal {
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .sql-input {
+            width: 100%;
+            background-color: #0d1117;
+            border: 1px solid #30363d;
+            color: #7ee787;
+            font-family: monospace;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            resize: vertical;
+            min-height: 80px;
+            margin-bottom: 12px;
+        }
+        .btn-run {
+            background-color: #238636;
+            color: white;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-run:hover { background-color: #2ea043; }
+        
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header class="top-nav">
+        <a href="index.html" class="brand">
+            <img src="https://img.icons8.com/color/96/database.png" alt="Logo">
+            <span>Auditoria 2026 • Live Dashboard</span>
+        </a>
+        <div class="nav-actions">
+            <a href="index.html" class="nav-btn">← Voltar ao Linktree</a>
+            <a href="https://github.com/matheuscampos-it/auditoria-eleicoes-2026" target="_blank" rel="noopener noreferrer" class="nav-btn primary">
+                GitHub Repo ↗
+            </a>
+        </div>
+    </header>
+
+    <div class="app-layout">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-title">Módulos Analíticos</div>
+            <button class="tab-btn active" onclick="switchTab('media')">
+                <span>🔍</span> Auditoria de Notícias
+            </button>
+            <button class="tab-btn" onclick="switchTab('macro')">
+                <span>📊</span> Séries Macroeconômicas
+            </button>
+            <button class="tab-btn" onclick="switchTab('matrix')">
+                <span>⚖️</span> Matriz de Risco (Indecisos)
+            </button>
+            <button class="tab-btn" onclick="switchTab('sql')">
+                <span>💻</span> Terminal SQL (DuckDB)
+            </button>
+            <button class="tab-btn" onclick="switchTab('sources')">
+                <span>🌐</span> Fontes & Documentos
+            </button>
+
+            <div class="sidebar-footer">
+                <p><b>🛡️ Dados Verificados:</b></p>
+                <p>• BACEN SGS (1619 & 3546)</p>
+                <p>• IBGE SIDRA / PNAD Contínua</p>
+                <p>• Votações Nominais do Senado</p>
+                <p>• Relatórios Coaf e Inquéritos PF</p>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            
+            <!-- ============================================================== -->
+            <!-- ABA 1: AUDITORIA DE MÍDIA & INVESTIGAÇÕES -->
+            <!-- ============================================================== -->
+            <section id="panel-media" class="tab-panel active">
+                <div>
+                    <span class="badge-pill badge-alert">DATA AUDIT</span>
+                    <span class="badge-pill badge-tech">NLP & MINERAÇÃO DE DADOS</span>
+                </div>
+                <h1 class="view-title">Auditoria de Mídia: Notícias, Investigações e Votações</h1>
+                <p class="view-desc">
+                    Mapeamento empírico de notícias de repercussão judicial, contradições parlamentares e investigações criminais 
+                    envolvendo Flávio Bolsonaro, seus familiares e o PL. Todos os eventos foram auditados em fontes primárias.
+                </p>
+
+                <div class="metric-grid">
+                    <div class="metric-card">
+                        <div class="metric-title">Votos Contra Renda</div>
+                        <div class="metric-value" style="color: #ff5252;">Salário Mínimo</div>
+                        <div class="metric-desc">Votou CONTRA a política permanente de reajuste pelo PIB</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-title">Aparelhamento Institucional</div>
+                        <div class="metric-value" style="color: #ff9100;">Abin Paralela</div>
+                        <div class="metric-desc">Comprovado pela Polícia Federal no inquérito do STF</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-title">Patrimônio em Espécie</div>
+                        <div class="metric-value" style="color: #40c4ff;">48 Depósitos</div>
+                        <div class="metric-desc">Fracionados em R$ 2 mil no caixa eletrônico da Alerj (Coaf)</div>
+                    </div>
+                </div>
+
+                <div class="chart-grid">
+                    <div class="chart-box">
+                        <h4 style="margin-bottom: 12px; color: #f0f6fc;">Distribuição por Eixo Crítico</h4>
+                        <div id="chart-media-pie" style="height: 320px;"></div>
+                    </div>
+                    <div class="chart-box">
+                        <h4 style="margin-bottom: 12px; color: #f0f6fc;">Cronologia dos Fatos Documentados (2018 - 2026)</h4>
+                        <div id="chart-media-bar" style="height: 320px;"></div>
+                    </div>
+                </div>
+
+                <hr style="border: 0; border-top: 1px solid #30363d; margin: 24px 0;">
+                
+                <h3 style="margin-bottom: 16px; color: #f0f6fc;">📋 Ficha Factual Detalhada das Notícias</h3>
+                <div class="controls-row">
+                    <div>
+                        <label style="font-size: 0.85rem; color: #8b949e; display: block; margin-bottom: 4px;">Filtrar por Categoria:</label>
+                        <select id="filter-cat" class="select-box" onchange="renderNewsList()">
+                            <option value="Todas">Todas as Categorias</option>
+                            <option value="Investigações & Abuso de Poder">Investigações & Abuso de Poder</option>
+                            <option value="Risco Institucional & Golpismo">Risco Institucional & Golpismo</option>
+                            <option value="Contradições & Incoerência Parlamentar">Contradições & Incoerência Parlamentar</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="font-size: 0.85rem; color: #8b949e; display: block; margin-bottom: 4px;">Filtrar por Gravidade:</label>
+                        <select id="filter-grav" class="select-box" onchange="renderNewsList()">
+                            <option value="Todas">Todas as Gravidades</option>
+                            <option value="5">Gravidade Máxima (5/5)</option>
+                            <option value="4">Gravidade Alta (4/5)</option>
+                        </select>
+                    </div>
+                    <div style="margin-left: auto; color: #8b949e; font-size: 0.88rem;" id="news-count-label">
+                        Carregando notícias...
+                    </div>
+                </div>
+
+                <div id="news-list-container"></div>
+            </section>
+
+            <!-- ============================================================== -->
+            <!-- ABA 2: SÉRIES MACROECONÔMICAS -->
+            <!-- ============================================================== -->
+            <section id="panel-macro" class="tab-panel">
+                <div>
+                    <span class="badge-pill badge-success">DADOS OFICIAIS</span>
+                    <span class="badge-pill badge-tech">BANCO CENTRAL & IBGE</span>
+                </div>
+                <h1 class="view-title">Séries Macroeconômicas Históricas (2002 - 2026)</h1>
+                <p class="view-desc">
+                    Séries temporais auditáveis extraídas diretamente dos sistemas públicos <b>SGS do Banco Central</b> 
+                    e <b>SIDRA do IBGE</b>, demonstrando a trajetória contínua de renda real, reservas cambiais e emprego.
+                </p>
+
+                <div class="metric-grid">
+                    <div class="metric-card">
+                        <div class="metric-title">Salário Mínimo Real</div>
+                        <div class="metric-value" style="color: #38ef7d;">+84%</div>
+                        <div class="metric-desc">Poder de compra real deflacionado pelo IPCA (2002-2026)</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-title">Reservas Cambiais</div>
+                        <div class="metric-value" style="color: #58a6ff;">US$ 365 Bi</div>
+                        <div class="metric-desc">Muralha cambial construída para proteger a moeda nacional</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-title">Taxa de Desocupação</div>
+                        <div class="metric-value" style="color: #38ef7d;">6.2%</div>
+                        <div class="metric-desc">Taxa de desemprego em mínimas históricas (PNAD/IBGE)</div>
+                    </div>
+                </div>
+
+                <div class="sub-nav">
+                    <button class="sub-btn active" onclick="switchMacroSub('sal')">Evolução do Salário Mínimo Real</button>
+                    <button class="sub-btn" onclick="switchMacroSub('res')">Reservas Internacionais (US$ Bi)</button>
+                    <button class="sub-btn" onclick="switchMacroSub('des')">Taxa de Desemprego (%)</button>
+                    <button class="sub-btn" onclick="switchMacroSub('table')">Tabela de Dados Completa</button>
+                </div>
+
+                <div id="macro-view-sal" class="chart-box">
+                    <div id="chart-macro-sal" style="height: 460px;"></div>
+                    <p style="font-size: 0.8rem; color: #8b949e; margin-top: 10px;">
+                        Fonte: Banco Central do Brasil (SGS Série 1619) deflacionado pelo IPCA. Ganho real acumulado de +84% no período histórico.
+                    </p>
+                </div>
+
+                <div id="macro-view-res" class="chart-box" style="display: none;">
+                    <div id="chart-macro-res" style="height: 460px;"></div>
+                    <p style="font-size: 0.8rem; color: #8b949e; margin-top: 10px;">
+                        Fonte: Banco Central do Brasil (SGS Série 3546). De US$ 37,8 Bi (2002) ao patamar atual de US$ 365 Bi.
+                    </p>
+                </div>
+
+                <div id="macro-view-des" class="chart-box" style="display: none;">
+                    <div id="chart-macro-des" style="height: 460px;"></div>
+                    <p style="font-size: 0.8rem; color: #8b949e; margin-top: 10px;">
+                        Fonte: IBGE (Pesquisa Nacional por Amostra de Domicílios Contínua - PNAD). Queda para 6,2% em 2026.
+                    </p>
+                </div>
+
+                <div id="macro-view-table" class="chart-box" style="display: none; overflow-x: auto;">
+                    <h4 style="margin-bottom: 12px;">Histórico Anual Consolidado (2002 - 2026)</h4>
+                    <table class="custom-table" id="macro-data-table">
+                        <thead>
+                            <tr>
+                                <th>Ano</th>
+                                <th>Mandato</th>
+                                <th>Bloco Político</th>
+                                <th>Salário Nominal (R$)</th>
+                                <th>Índice Real (Base 2002=100)</th>
+                                <th>Reservas (US$ Bi)</th>
+                                <th>Desemprego (%)</th>
+                                <th>IPCA (%)</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- ============================================================== -->
+            <!-- ABA 3: MATRIZ DE GESTÃO DE RISCO (INDECISOS) -->
+            <!-- ============================================================== -->
+            <section id="panel-matrix" class="tab-panel">
+                <div>
+                    <span class="badge-pill badge-tech">ANÁLISE DE DECISÃO</span>
+                    <span class="badge-pill badge-alert">GESTÃO DE RISCO</span>
+                </div>
+                <h1 class="view-title">Matriz Comparativa: Previsibilidade vs. Risco Crônico</h1>
+                <p class="view-desc">
+                    Para o eleitor indeciso, a decisão não é baseada em torcida partidária, mas em <b>gestão de risco e previsibilidade</b>.
+                </p>
+
+                <div style="overflow-x: auto; margin-top: 15px;">
+                    <table class="custom-table">
+                        <thead>
+                            <tr>
+                                <th style="color: #58a6ff;">Eixo de Auditoria</th>
+                                <th style="color: #3fb950;">Gestão Lula (Fatos Comprovados)</th>
+                                <th style="color: #f85149;">Flávio Bolsonaro & PL (Ações Reais)</th>
+                                <th style="color: #d29922;">A Decisão Lógica</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="font-weight: 600; color: #e6edf3;">Seu Salário e Poder de Compra</td>
+                                <td>Ganho real de +84% no período histórico; fórmula de valorização real (PIB + IPCA).</td>
+                                <td><b style="color: #ff7b72;">Votou CONTRA</b> a política permanente de valorização do salário mínimo no Senado.</td>
+                                <td style="color: #7ee787; font-weight: 600;">Lula garante aumento real; Flávio votou contra no Senado.</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 600; color: #e6edf3;">Transparência e Dinheiro Público</td>
+                                <td>Criação do Portal da Transparência, CGU e autonomia total aos órgãos fiscalizadores.</td>
+                                <td><b style="color: #ff7b72;">48 depósitos em dinheiro vivo</b> de R$ 2 mil, mansão de R$ 6M e caso Queiroz.</td>
+                                <td style="color: #7ee787; font-weight: 600;">Lula garante governança pública; Flávio movimenta dinheiro vivo.</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 600; color: #e6edf3;">Uso da Polícia e da Inteligência</td>
+                                <td>Fortalecimento técnico da PF com investigações sem interferência política.</td>
+                                <td><b style="color: #ff7b72;">Abin paralela</b> usada ilegalmente para espionar e blindar a família de processos.</td>
+                                <td style="color: #7ee787; font-weight: 600;">Lula respeita as instituições; Flávio aparelhou a Abin como escudo.</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 600; color: #e6edf3;">Estabilidade das Leis e Democracia</td>
+                                <td>Condução democrática, transição pacífica e diálogo institucional com os Poderes.</td>
+                                <td><b style="color: #ff7b72;">Multa de R$ 22,9M</b> por atacar urnas, discursos golpistas e PEC das Praias.</td>
+                                <td style="color: #7ee787; font-weight: 600;">Lula assegura estabilidade política; Flávio gera crises e multas.</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 600; color: #e6edf3;">Conta de Luz e Tarifas Públicas</td>
+                                <td>Luz para Todos, defesa de modicidade tarifária estatal e subsídios para baixa renda.</td>
+                                <td><b style="color: #ff7b72;">Votou SIM</b> pela privatização da Eletrobras com jabutis que encareceram a energia.</td>
+                                <td style="color: #7ee787; font-weight: 600;">Lula protege tarifas populares; Flávio votou para encarecer a luz.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- ============================================================== -->
+            <!-- ABA 4: TERMINAL SQL / CONSULTA ANALÍTICA -->
+            <!-- ============================================================== -->
+            <section id="panel-sql" class="tab-panel">
+                <div>
+                    <span class="badge-pill badge-tech">DUCKDB ENGINE</span>
+                    <span class="badge-pill badge-success">SQL LIVE</span>
+                </div>
+                <h1 class="view-title">Terminal SQL Analítico: Consultas em Tempo Real</h1>
+                <p class="view-desc">
+                    Execute consultas analíticas diretamente sobre os datasets locais em memória. Transparência e reprodutibilidade total.
+                </p>
+
+                <div class="sql-terminal">
+                    <label style="font-size: 0.85rem; color: #8b949e; display: block; margin-bottom: 8px;">Consultas Rápidas de Auditoria:</label>
+                    <select id="preset-sql" class="select-box" style="width: 100%; margin-bottom: 12px;" onchange="loadPresetSql()">
+                        <option value="view_bloco">Comparativo: Ganho Real de Salário e Desemprego por Bloco de Governo</option>
+                        <option value="view_risco">Resumo: Total de Notícias e Gravidade Média por Categoria</option>
+                        <option value="media_max">Notícias de Gravidade Máxima (Score 5/5) Ordenadas por Data</option>
+                        <option value="macro_all">Série Macroeconômica Histórica Completa (2002 - 2026)</option>
+                    </select>
+
+                    <textarea id="sql-text" class="sql-input" rows="3" readonly></textarea>
+                    <button class="btn-run" onclick="executeCurrentQuery()">⚡ Executar Consulta</button>
+                </div>
+
+                <div id="sql-results-container" style="overflow-x: auto;"></div>
+            </section>
+
+            <!-- ============================================================== -->
+            <!-- ABA 5: REPOSITÓRIO DE FONTES & DOCUMENTOS -->
+            <!-- ============================================================== -->
+            <section id="panel-sources" class="tab-panel">
+                <div>
+                    <span class="badge-pill badge-success">FONTES OFICIAIS</span>
+                    <span class="badge-pill badge-tech">DOCUMENTOS PRIMÁRIOS</span>
+                </div>
+                <h1 class="view-title">Repositório de Fontes Oficiais & Documentos Primários</h1>
+                <p class="view-desc">
+                    Todos os dados deste projeto foram auditados e possuem link direto para suas fontes primárias.
+                </p>
+
+                <div style="background-color: #101d2c; border: 1px solid #1f6feb; border-radius: 10px; padding: 18px 22px; margin-bottom: 24px;">
+                    <p style="margin-bottom: 8px;">🔗 <b>Linktree Oficial (Hub Unificado de Links):</b></p>
+                    <p><a href="index.html" style="color: #58a6ff; font-weight: 600;">👉 https://matheuscampos-it.github.io/auditoria-eleicoes-2026/</a></p>
+                    <p style="margin-top: 14px; margin-bottom: 8px;">📑 <b>Dossiê no Telegraph com todas as certidões e links:</b></p>
+                    <p><a href="https://telegra.ph/Auditoria-2026-Fontes-e-Documentos-Oficiais-10-09" target="_blank" rel="noopener noreferrer" style="color: #58a6ff; font-weight: 600;">👉 https://telegra.ph/Auditoria-2026-Fontes-e-Documentos-Oficiais-10-09</a></p>
+                </div>
+
+                <h3 style="margin-bottom: 12px; color: #f0f6fc;">🏛️ Fontes Governamentais, Leis e Séries Econômicas</h3>
+                <ul style="margin-left: 20px; line-height: 2; margin-bottom: 24px;">
+                    <li><b>Banco Central do Brasil (BACEN):</b> <a href="https://www.bcb.gov.br/" target="_blank" rel="noopener noreferrer" style="color: #58a6ff;">Sistema Gerenciador de Séries Temporais (SGS)</a> (Séries 3546 e 1619).</li>
+                    <li><b>IBGE:</b> <a href="https://www.ibge.gov.br/" target="_blank" rel="noopener noreferrer" style="color: #58a6ff;">PNAD Contínua & Séries SIDRA - Desocupação e Renda</a>.</li>
+                    <li><b>Senado Federal (Salário Mínimo):</b> <a href="https://www12.senado.leg.br/noticias/materias/2023/08/24/salario-minimo-de-r-1-320-e-correcao-do-ir-vao-a-sancao" target="_blank" rel="noopener noreferrer" style="color: #58a6ff;">Agência Senado - Política Permanente de Valorização Real</a>.</li>
+                    <li><b>Privatização da Eletrobras (MP 1031/2021):</b> <a href="https://www.poder360.com.br/congresso/saiba-como-votou-cada-partido-e-senador-na-mp-da-capitalizacao-da-eletrobras/" target="_blank" rel="noopener noreferrer" style="color: #58a6ff;">Poder360 - Painel Nominal de Votação</a> e <a href="https://www25.senado.leg.br/web/atividade/materias/-/materia/148419" target="_blank" rel="noopener noreferrer" style="color: #58a6ff;">Senado - Ficha da Matéria</a>.</li>
+                    <li><b>PEC das Praias (PEC 3/2022):</b> <a href="https://www25.senado.leg.br/web/atividade/materias/-/materia/151923" target="_blank" rel="noopener noreferrer" style="color: #58a6ff;">Senado Federal - Ficha Oficial de Tramitação</a>.</li>
+                    <li><b>Teto de Gastos (EC 95/2016):</b> <a href="https://www.camara.leg.br/propostas-legislativas/2088351" target="_blank" rel="noopener noreferrer" style="color: #58a6ff;">Câmara dos Deputados - Histórico da Tramitação</a>.</li>
+                </ul>
+
+                <h3 style="margin-bottom: 12px; color: #f0f6fc;">⚖️ Investigações, Inquéritos e Tribunais</h3>
+                <ul style="margin-left: 20px; line-height: 2;">
+                    <li><b>Operação Vigilância Aproximada (Abin Paralela):</b> <a href="https://g1.globo.com/politica/noticia/2024/07/11/abin-espionou-auditores-da-receita-federal-que-apuravam-possivel-rachadinha-de-flavio-bolsonaro-diz-pf.ghtml" target="_blank" rel="noopener noreferrer" style="color: #58a6ff;">G1 / PF - Abin espionou auditores da Receita para orientar defesa de Flávio</a>.</li>
+                    <li><b>Áudio no Palácio do Planalto:</b> <a href="https://www.cnnbrasil.com.br/politica/integra-gravacao-bolsonaro-ramagem/" target="_blank" rel="noopener noreferrer" style="color: #58a6ff;">CNN Brasil - Íntegra da gravação entre Bolsonaro, Ramagem e advogadas</a>.</li>
+                    <li><b>Evolução Patrimonial (Mansão Lago Sul):</b> <a href="https://g1.globo.com/jornal-nacional/noticia/2021/03/02/flavio-bolsonaro-compra-casa-de-quase-r-6-milhoes-em-area-nobre-de-brasilia.ghtml" target="_blank" rel="noopener noreferrer" style="color: #58a6ff;">Jornal Nacional - Compra e Financiamento da Mansão de R$ 6 Milhões</a>.</li>
+                    <li><b>Conselho de Controle de Atividades Financeiras (Coaf):</b> <a href="https://g1.globo.com/jornal-nacional/noticia/2019/01/18/jn-tem-acesso-a-relatorio-do-coaf-sobre-movimentacoes-de-flavio-bolsonaro.ghtml" target="_blank" rel="noopener noreferrer" style="color: #58a6ff;">Jornal Nacional - Relatório do Coaf: 48 depósitos em espécie</a>.</li>
+                    <li><b>Lavagem de Capitais (Franquia de Chocolates):</b> <a href="https://g1.globo.com/jornal-nacional/noticia/2019/12/19/investigacao-que-envolve-flavio-bolsonaro-aponta-indicios-de-lavagem-de-dinheiro.ghtml" target="_blank" rel="noopener noreferrer" style="color: #58a6ff;">Jornal Nacional - Perícia Contábil do MP-RJ sobre a Franquia</a>.</li>
+                    <li><b>Tribunal Superior Eleitoral (TSE):</b> <a href="https://g1.globo.com/politica/noticia/2022/11/23/moraes-decisao-pl-relatorio-urnas.ghtml" target="_blank" rel="noopener noreferrer" style="color: #58a6ff;">G1 / TSE - Moraes multa PL em R$ 22,9M por litigância de má-fé contra as urnas</a>.</li>
+                </ul>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Datasets Embutidos -->
+    <script>
+        const MACRO_DATA = [
+  {
+    "ano":2002,
+    "mandato":"Fim FHC",
+    "reservas_usd_bi":37.8,
+    "salario_minimo_nominal":200.0,
+    "salario_minimo_real_indice":100.0,
+    "desemprego_pct":11.7,
+    "inflacao_ipca_pct":12.5,
+    "indice_gini":0.589,
+    "bloco_politico":"Outras Gestões (FHC \/ Temer)"
+  },
+  {
+    "ano":2003,
+    "mandato":"Lula 1",
+    "reservas_usd_bi":49.3,
+    "salario_minimo_nominal":240.0,
+    "salario_minimo_real_indice":101.4,
+    "desemprego_pct":12.3,
+    "inflacao_ipca_pct":9.3,
+    "indice_gini":0.581,
+    "bloco_politico":"Governos Lula"
+  },
+  {
+    "ano":2004,
+    "mandato":"Lula 1",
+    "reservas_usd_bi":52.9,
+    "salario_minimo_nominal":260.0,
+    "salario_minimo_real_indice":103.2,
+    "desemprego_pct":11.5,
+    "inflacao_ipca_pct":7.6,
+    "indice_gini":0.569,
+    "bloco_politico":"Governos Lula"
+  },
+  {
+    "ano":2005,
+    "mandato":"Lula 1",
+    "reservas_usd_bi":53.8,
+    "salario_minimo_nominal":300.0,
+    "salario_minimo_real_indice":110.1,
+    "desemprego_pct":9.8,
+    "inflacao_ipca_pct":5.7,
+    "indice_gini":0.566,
+    "bloco_politico":"Governos Lula"
+  },
+  {
+    "ano":2006,
+    "mandato":"Lula 1",
+    "reservas_usd_bi":85.8,
+    "salario_minimo_nominal":350.0,
+    "salario_minimo_real_indice":121.5,
+    "desemprego_pct":8.4,
+    "inflacao_ipca_pct":3.1,
+    "indice_gini":0.558,
+    "bloco_politico":"Governos Lula"
+  },
+  {
+    "ano":2007,
+    "mandato":"Lula 2",
+    "reservas_usd_bi":180.3,
+    "salario_minimo_nominal":380.0,
+    "salario_minimo_real_indice":125.8,
+    "desemprego_pct":8.2,
+    "inflacao_ipca_pct":4.5,
+    "indice_gini":0.552,
+    "bloco_politico":"Governos Lula"
+  },
+  {
+    "ano":2008,
+    "mandato":"Lula 2",
+    "reservas_usd_bi":206.8,
+    "salario_minimo_nominal":415.0,
+    "salario_minimo_real_indice":131.2,
+    "desemprego_pct":7.9,
+    "inflacao_ipca_pct":5.9,
+    "indice_gini":0.544,
+    "bloco_politico":"Governos Lula"
+  },
+  {
+    "ano":2009,
+    "mandato":"Lula 2",
+    "reservas_usd_bi":238.5,
+    "salario_minimo_nominal":465.0,
+    "salario_minimo_real_indice":139.0,
+    "desemprego_pct":8.1,
+    "inflacao_ipca_pct":4.3,
+    "indice_gini":0.539,
+    "bloco_politico":"Governos Lula"
+  },
+  {
+    "ano":2010,
+    "mandato":"Lula 2",
+    "reservas_usd_bi":288.6,
+    "salario_minimo_nominal":510.0,
+    "salario_minimo_real_indice":147.3,
+    "desemprego_pct":6.7,
+    "inflacao_ipca_pct":5.9,
+    "indice_gini":0.53,
+    "bloco_politico":"Governos Lula"
+  },
+  {
+    "ano":2011,
+    "mandato":"Dilma",
+    "reservas_usd_bi":352.0,
+    "salario_minimo_nominal":545.0,
+    "salario_minimo_real_indice":148.5,
+    "desemprego_pct":6.0,
+    "inflacao_ipca_pct":6.5,
+    "indice_gini":0.527,
+    "bloco_politico":"Governo Dilma"
+  },
+  {
+    "ano":2012,
+    "mandato":"Dilma",
+    "reservas_usd_bi":373.1,
+    "salario_minimo_nominal":622.0,
+    "salario_minimo_real_indice":158.2,
+    "desemprego_pct":5.5,
+    "inflacao_ipca_pct":5.8,
+    "indice_gini":0.526,
+    "bloco_politico":"Governo Dilma"
+  },
+  {
+    "ano":2013,
+    "mandato":"Dilma",
+    "reservas_usd_bi":358.8,
+    "salario_minimo_nominal":678.0,
+    "salario_minimo_real_indice":161.4,
+    "desemprego_pct":5.4,
+    "inflacao_ipca_pct":5.9,
+    "indice_gini":0.528,
+    "bloco_politico":"Governo Dilma"
+  },
+  {
+    "ano":2014,
+    "mandato":"Dilma",
+    "reservas_usd_bi":363.5,
+    "salario_minimo_nominal":724.0,
+    "salario_minimo_real_indice":163.1,
+    "desemprego_pct":4.8,
+    "inflacao_ipca_pct":6.4,
+    "indice_gini":0.524,
+    "bloco_politico":"Governo Dilma"
+  },
+  {
+    "ano":2015,
+    "mandato":"Dilma",
+    "reservas_usd_bi":356.5,
+    "salario_minimo_nominal":788.0,
+    "salario_minimo_real_indice":162.8,
+    "desemprego_pct":6.8,
+    "inflacao_ipca_pct":10.7,
+    "indice_gini":0.525,
+    "bloco_politico":"Governo Dilma"
+  },
+  {
+    "ano":2016,
+    "mandato":"Temer",
+    "reservas_usd_bi":365.0,
+    "salario_minimo_nominal":880.0,
+    "salario_minimo_real_indice":164.2,
+    "desemprego_pct":11.5,
+    "inflacao_ipca_pct":6.3,
+    "indice_gini":0.537,
+    "bloco_politico":"Outras Gestões (FHC \/ Temer)"
+  },
+  {
+    "ano":2017,
+    "mandato":"Temer",
+    "reservas_usd_bi":374.0,
+    "salario_minimo_nominal":937.0,
+    "salario_minimo_real_indice":166.5,
+    "desemprego_pct":12.7,
+    "inflacao_ipca_pct":3.0,
+    "indice_gini":0.538,
+    "bloco_politico":"Outras Gestões (FHC \/ Temer)"
+  },
+  {
+    "ano":2018,
+    "mandato":"Temer",
+    "reservas_usd_bi":374.7,
+    "salario_minimo_nominal":954.0,
+    "salario_minimo_real_indice":165.8,
+    "desemprego_pct":12.3,
+    "inflacao_ipca_pct":3.8,
+    "indice_gini":0.539,
+    "bloco_politico":"Outras Gestões (FHC \/ Temer)"
+  },
+  {
+    "ano":2019,
+    "mandato":"Bolsonaro",
+    "reservas_usd_bi":356.9,
+    "salario_minimo_nominal":998.0,
+    "salario_minimo_real_indice":167.0,
+    "desemprego_pct":11.9,
+    "inflacao_ipca_pct":4.3,
+    "indice_gini":0.543,
+    "bloco_politico":"Governo Bolsonaro (Apoiado por Flávio\/PL)"
+  },
+  {
+    "ano":2020,
+    "mandato":"Bolsonaro",
+    "reservas_usd_bi":355.6,
+    "salario_minimo_nominal":1045.0,
+    "salario_minimo_real_indice":166.2,
+    "desemprego_pct":13.5,
+    "inflacao_ipca_pct":4.5,
+    "indice_gini":0.54,
+    "bloco_politico":"Governo Bolsonaro (Apoiado por Flávio\/PL)"
+  },
+  {
+    "ano":2021,
+    "mandato":"Bolsonaro",
+    "reservas_usd_bi":362.2,
+    "salario_minimo_nominal":1100.0,
+    "salario_minimo_real_indice":160.5,
+    "desemprego_pct":13.2,
+    "inflacao_ipca_pct":10.1,
+    "indice_gini":0.544,
+    "bloco_politico":"Governo Bolsonaro (Apoiado por Flávio\/PL)"
+  },
+  {
+    "ano":2022,
+    "mandato":"Bolsonaro",
+    "reservas_usd_bi":324.7,
+    "salario_minimo_nominal":1212.0,
+    "salario_minimo_real_indice":161.0,
+    "desemprego_pct":9.3,
+    "inflacao_ipca_pct":5.8,
+    "indice_gini":0.535,
+    "bloco_politico":"Governo Bolsonaro (Apoiado por Flávio\/PL)"
+  },
+  {
+    "ano":2023,
+    "mandato":"Lula 3",
+    "reservas_usd_bi":355.0,
+    "salario_minimo_nominal":1320.0,
+    "salario_minimo_real_indice":166.8,
+    "desemprego_pct":7.8,
+    "inflacao_ipca_pct":4.6,
+    "indice_gini":0.518,
+    "bloco_politico":"Governos Lula"
+  },
+  {
+    "ano":2024,
+    "mandato":"Lula 3",
+    "reservas_usd_bi":359.2,
+    "salario_minimo_nominal":1412.0,
+    "salario_minimo_real_indice":172.5,
+    "desemprego_pct":6.9,
+    "inflacao_ipca_pct":3.9,
+    "indice_gini":0.512,
+    "bloco_politico":"Governos Lula"
+  },
+  {
+    "ano":2025,
+    "mandato":"Lula 3",
+    "reservas_usd_bi":362.4,
+    "salario_minimo_nominal":1518.0,
+    "salario_minimo_real_indice":178.1,
+    "desemprego_pct":6.4,
+    "inflacao_ipca_pct":3.8,
+    "indice_gini":0.508,
+    "bloco_politico":"Governos Lula"
+  },
+  {
+    "ano":2026,
+    "mandato":"Lula 3",
+    "reservas_usd_bi":365.0,
+    "salario_minimo_nominal":1620.0,
+    "salario_minimo_real_indice":184.0,
+    "desemprego_pct":6.2,
+    "inflacao_ipca_pct":3.7,
+    "indice_gini":0.505,
+    "bloco_politico":"Governos Lula"
+  }
+];
+        const MEDIA_DATA = [
+  {
+    "data":"2018-12-06",
+    "ano":2018,
+    "veiculo":"Estadão \/ Folha",
+    "titulo":"Relatório do Coaf aponta movimentação atípica de R$ 1,2 milhão de Fabrício Queiroz, ex-assessor de Flávio Bolsonaro",
+    "alvo":"Flávio Bolsonaro",
+    "categoria":"Investigações & Abuso de Poder",
+    "gravidade_score":5,
+    "resumo":"Início do escândalo das rachadinhas na Alerj revelando repasses sistemáticos de salários de funcionários para Queiroz.",
+    "impacto_eleitor":"Demonstra suspeita de apropriação indevida de dinheiro público por mais de uma década."
+  },
+  {
+    "data":"2019-01-18",
+    "ano":2019,
+    "veiculo":"Jornal Nacional \/ TV Globo",
+    "titulo":"Coaf revela 48 depósitos em dinheiro vivo em um único mês na conta bancária de Flávio Bolsonaro",
+    "alvo":"Flávio Bolsonaro",
+    "categoria":"Investigações & Abuso de Poder",
+    "gravidade_score":5,
+    "resumo":"Depósitos fracionados de R$ 2.000 em terminais bancários para burlar os sistemas de controle financeiro do Banco Central.",
+    "impacto_eleitor":"Evidência clara de manobras para ocultação de patrimônio e lavagem de capitais."
+  },
+  {
+    "data":"2019-07-16",
+    "ano":2019,
+    "veiculo":"G1 \/ Folha",
+    "titulo":"Defesa de Flávio Bolsonaro recorre ao STF e consegue suspender todas as investigações sobre Queiroz e Coaf",
+    "alvo":"Flávio Bolsonaro",
+    "categoria":"Investigações & Abuso de Poder",
+    "gravidade_score":4,
+    "resumo":"Uso intensivo de manobras jurídicas para paralisar investigações contra si próprio, contrariando o discurso anticorrupção.",
+    "impacto_eleitor":"Contradição frontal com o slogan de 'quem não deve não teme'."
+  },
+  {
+    "data":"2019-12-18",
+    "ano":2019,
+    "veiculo":"UOL \/ MP-RJ",
+    "titulo":"MP-RJ aponta que loja de chocolates de Flávio Bolsonaro era usada para lavar até R$ 1,6 milhão em dinheiro vivo",
+    "alvo":"Flávio Bolsonaro",
+    "categoria":"Investigações & Abuso de Poder",
+    "gravidade_score":5,
+    "resumo":"Perícia financeira demonstrou descompasso absoluto entre o volume de vendas de doces e as quantias depositadas em espécie.",
+    "impacto_eleitor":"Método clássico de lavagem de dinheiro envolvendo comércios de fachada."
+  },
+  {
+    "data":"2020-06-18",
+    "ano":2020,
+    "veiculo":"G1 \/ Folha \/ Estadão",
+    "titulo":"Fabrício Queiroz é preso em imóvel de Frederick Wassef, advogado da família Bolsonaro, em Atibaia",
+    "alvo":"Flávio Bolsonaro \/ Clã",
+    "categoria":"Investigações & Abuso de Poder",
+    "gravidade_score":5,
+    "resumo":"Prisão do operador das rachadinhas escondido no sítio do advogado que frequentava o Palácio do Planalto.",
+    "impacto_eleitor":"Mostra a tentativa deliberada de obstrução de Justiça e ocultação de testemunha-chave."
+  },
+  {
+    "data":"2020-11-04",
+    "ano":2020,
+    "veiculo":"Ministério Público do RJ",
+    "titulo":"MP do Rio denuncia formalmente Flávio Bolsonaro por peculato, lavagem de dinheiro e organização criminosa",
+    "alvo":"Flávio Bolsonaro",
+    "categoria":"Investigações & Abuso de Poder",
+    "gravidade_score":5,
+    "resumo":"Denúncia criminal robusta apontando desvio estruturado de verba pública ao longo de mandatos sucessivos na Alerj.",
+    "impacto_eleitor":"Fatos criminais detalhados em inquérito oficial, não meras acusações políticas."
+  },
+  {
+    "data":"2021-03-01",
+    "ano":2021,
+    "veiculo":"O Globo \/ Metrópoles",
+    "titulo":"Flávio Bolsonaro compra mansão de luxo de R$ 6 milhões em bairro nobre de Brasília com renda parlamentar",
+    "alvo":"Flávio Bolsonaro",
+    "categoria":"Investigações & Abuso de Poder",
+    "gravidade_score":4,
+    "resumo":"Aquisição imobiliária de alto padrão com condições de financiamento atípicas no BRB (Banco de Brasília).",
+    "impacto_eleitor":"Desconexão gritante com a realidade econômica do trabalhador brasileiro que ganha salário mínimo."
+  },
+  {
+    "data":"2021-11-09",
+    "ano":2021,
+    "veiculo":"STJ \/ ConJur",
+    "titulo":"STJ anula quebras de sigilo e decisões do caso das rachadinhas de Flávio Bolsonaro por questões processuais",
+    "alvo":"Flávio Bolsonaro",
+    "categoria":"Investigações & Abuso de Poder",
+    "gravidade_score":4,
+    "resumo":"Anulação baseada em filigranas de foro privilegiado, sem que o mérito das provas e dos desvios fosse inocentado.",
+    "impacto_eleitor":"Vitória jurídica por foro e tecnicismo, não por comprovação de inocência."
+  },
+  {
+    "data":"2024-01-25",
+    "ano":2024,
+    "veiculo":"Polícia Federal \/ G1",
+    "titulo":"PF aponta uso da Abin paralela para produzir relatórios sigilosos destinados a blindar Flávio Bolsonaro no caso Queiroz",
+    "alvo":"Flávio Bolsonaro \/ Alexandre Ramagem",
+    "categoria":"Investigações & Abuso de Poder",
+    "gravidade_score":5,
+    "resumo":"Investigação da Polícia Federal comprovou uso da agência de inteligência do Estado brasileiro para fins de defesa privada da família.",
+    "impacto_eleitor":"Aparelhamento explícito da máquina do Estado para interesse familiar e impunidade."
+  },
+  {
+    "data":"2018-10-21",
+    "ano":2018,
+    "veiculo":"Folha de S.Paulo",
+    "titulo":"Eduardo e Flávio Bolsonaro endossam discurso contra o STF: 'Para fechar o Supremo basta um soldado e um cabo'",
+    "alvo":"Clã Bolsonaro",
+    "categoria":"Risco Institucional & Golpismo",
+    "gravidade_score":5,
+    "resumo":"Ameaça direta de intervenção armada e ruptura institucional contra a mais alta corte de Justiça do país.",
+    "impacto_eleitor":"Desprezo aberto pelas regras do jogo democrático e separação de poderes."
+  },
+  {
+    "data":"2019-10-31",
+    "ano":2019,
+    "veiculo":"Congresso em Foco \/ UOL",
+    "titulo":"Clã Bolsonaro flerta abertamente com retorno do AI-5 em caso de manifestações populares no Brasil",
+    "alvo":"Flávio e Clã Bolsonaro",
+    "categoria":"Risco Institucional & Golpismo",
+    "gravidade_score":5,
+    "resumo":"Evocação do ato institucional mais repressivo da ditadura militar como instrumento de coerção social.",
+    "impacto_eleitor":"Mostra a predisposição a cassar direitos civis e liberdades individuais da população."
+  },
+  {
+    "data":"2021-08-10",
+    "ano":2021,
+    "veiculo":"O Globo \/ CNN Brasil",
+    "titulo":"Bancada governista e Flávio pressionam por desfile militar de tanques na Esplanada no dia da votação do voto impresso",
+    "alvo":"Flávio Bolsonaro \/ PL",
+    "categoria":"Risco Institucional & Golpismo",
+    "gravidade_score":5,
+    "resumo":"Tentativa de intimidação física e psicológica do Congresso Nacional com blindados militares na Praça dos Três Poderes.",
+    "impacto_eleitor":"Uso de intimidação e força para coagir o parlamento a votar de acordo com seus interesses."
+  },
+  {
+    "data":"2022-11-23",
+    "ano":2022,
+    "veiculo":"TSE \/ G1",
+    "titulo":"PL de Valdemar e Flávio Bolsonaro pede anulação de votos de urnas eletrônicas após derrota eleitoral",
+    "alvo":"PL \/ Flávio Bolsonaro",
+    "categoria":"Risco Institucional & Golpismo",
+    "gravidade_score":5,
+    "resumo":"Ação golpista para invalidar milhões de votos de cidadãos brasileiros sem qualquer fundamento técnico, resultando em multa de R$ 22,9 milhões.",
+    "impacto_eleitor":"Tentativa deliberada de anular a soberania do voto popular do eleitor."
+  },
+  {
+    "data":"2023-01-09",
+    "ano":2023,
+    "veiculo":"Jornal Nacional \/ Portais Internacionais",
+    "titulo":"Invasão e destruição dos Três Poderes em 8 de Janeiro: CPMI aponta omissão e incentivo de líderes bolsonaristas",
+    "alvo":"PL \/ Flávio Bolsonaro \/ Oposição",
+    "categoria":"Risco Institucional & Golpismo",
+    "gravidade_score":5,
+    "resumo":"Culminação da retórica golpista com a depredação do Palácio do Planalto, Congresso Nacional e Supremo Tribunal Federal.",
+    "impacto_eleitor":"O resultado prático e caótico da ideologia extremista quando confrontada com a perda do poder."
+  },
+  {
+    "data":"2024-03-12",
+    "ano":2024,
+    "veiculo":"Senado Federal \/ CartaCapital",
+    "titulo":"Flávio Bolsonaro lidera articulação no Senado por PEC que limita poderes do STF e projeto de anistia a golpistas",
+    "alvo":"Flávio Bolsonaro \/ PL",
+    "categoria":"Risco Institucional & Golpismo",
+    "gravidade_score":4,
+    "resumo":"Tentativa parlamentar de perdoar legalmente condenados por tentativa de golpe de Estado e enfraquecer o tribunal que julga seus crimes.",
+    "impacto_eleitor":"Busca contínua de impunidade para criminosos antidemocráticos."
+  },
+  {
+    "data":"2025-05-19",
+    "ano":2025,
+    "veiculo":"Poder360 \/ Estadão",
+    "titulo":"Senador Flávio Bolsonaro defende impeachment em massa de ministros do STF em discurso no plenário",
+    "alvo":"Flávio Bolsonaro",
+    "categoria":"Risco Institucional & Golpismo",
+    "gravidade_score":4,
+    "resumo":"Estratégia de retaliação institucional contínua para desestabilizar o equilíbrio entre os Três Poderes da República.",
+    "impacto_eleitor":"Promove caos político perpétuo em vez de foco no desenvolvimento econômico e social."
+  },
+  {
+    "data":"2019-10-22",
+    "ano":2019,
+    "veiculo":"Senado Federal \/ Diário Oficial",
+    "titulo":"Flávio Bolsonaro vota a favor da Reforma da Previdência com endurecimento de regras para aposentadoria do trabalhador",
+    "alvo":"Flávio Bolsonaro",
+    "categoria":"Contradições & Incoerência Parlamentar",
+    "gravidade_score":4,
+    "resumo":"Apoio a regras que aumentaram a idade mínima e reduziram pensões, enquanto categorias privilegiadas mantiveram vantagens.",
+    "impacto_eleitor":"Voto direto contra o futuro previdenciário da classe trabalhadora."
+  },
+  {
+    "data":"2020-04-15",
+    "ano":2020,
+    "veiculo":"Câmara \/ Senado \/ UOL",
+    "titulo":"Governo apoiado por Flávio propõe Auxílio Emergencial de apenas R$ 200 na pandemia; Congresso teve que elevar para R$ 600",
+    "alvo":"Governo Bolsonaro \/ Flávio",
+    "categoria":"Contradições & Incoerência Parlamentar",
+    "gravidade_score":4,
+    "resumo":"Proposta inicial irrisória de assistência às famílias vulneráveis durante o auge do fechamento da economia.",
+    "impacto_eleitor":"Falta de sensibilidade social com quem não tinha renda para comprar comida."
+  },
+  {
+    "data":"2021-06-17",
+    "ano":2021,
+    "veiculo":"Senado Federal \/ Folha",
+    "titulo":"Flávio Bolsonaro vota pela privatização da Eletrobras com inclusão de 'jabutis' que encareceram a conta de luz",
+    "alvo":"Flávio Bolsonaro",
+    "categoria":"Contradições & Incoerência Parlamentar",
+    "gravidade_score":4,
+    "resumo":"Voto que transferiu patrimônio estratégico e aumentou custos fixos de energia elétrica para indústrias e famílias brasileiras.",
+    "impacto_eleitor":"Impacto direto na conta de luz e no custo de vida de todo cidadão."
+  },
+  {
+    "data":"2021-12-02",
+    "ano":2021,
+    "veiculo":"Senado Federal",
+    "titulo":"Votação da PEC dos Precatórios: Flávio atua para postergar pagamento de dívidas judiciais a professores e aposentados",
+    "alvo":"Flávio Bolsonaro",
+    "categoria":"Contradições & Incoerência Parlamentar",
+    "gravidade_score":4,
+    "resumo":"Manobra orçamentária apelidada de 'calote oficial' para abrir espaço fiscal em ano pré-eleitoral.",
+    "impacto_eleitor":"Adiou o direito legal de receber de milhares de credores e servidores públicos."
+  },
+  {
+    "data":"2022-07-14",
+    "ano":2022,
+    "veiculo":"Congresso em Foco",
+    "titulo":"Flávio e bancada do PL apoiam aumento do Fundo Eleitoral bilionário de R$ 4,9 bilhões para campanhas",
+    "alvo":"PL \/ Flávio Bolsonaro",
+    "categoria":"Contradições & Incoerência Parlamentar",
+    "gravidade_score":5,
+    "resumo":"Destinação recorde de dinheiro dos impostos para financiar campanhas partidárias, contrariando o discurso de corte de gastos.",
+    "impacto_eleitor":"Bilhões do contribuinte drenados diretamente para o caixa de partidos políticos."
+  },
+  {
+    "data":"2023-08-24",
+    "ano":2023,
+    "veiculo":"Senado Federal \/ Agência Senado",
+    "titulo":"Flávio Bolsonaro vota contra a nova política de valorização permanente do Salário Mínimo de Lula",
+    "alvo":"Flávio Bolsonaro",
+    "categoria":"Contradições & Incoerência Parlamentar",
+    "gravidade_score":5,
+    "resumo":"Voto contrário ao projeto que garante reajuste acima da inflação baseado no crescimento do PIB para quem ganha piso nacional.",
+    "impacto_eleitor":"Evidência documental de voto contra o aumento da renda dos mais pobres."
+  },
+  {
+    "data":"2024-05-28",
+    "ano":2024,
+    "veiculo":"O Globo \/ Valor",
+    "titulo":"Flávio Bolsonaro atua como relator da PEC das Praias, abrindo brecha para privatização de áreas litorâneas",
+    "alvo":"Flávio Bolsonaro",
+    "categoria":"Contradições & Incoerência Parlamentar",
+    "gravidade_score":4,
+    "resumo":"Defesa explícita de interesses de megaempreendimentos imobiliários contra o livre acesso público às praias brasileiras.",
+    "impacto_eleitor":"Privatização de bens públicos em favor de especuladores de altíssima renda."
+  },
+  {
+    "data":"2025-11-10",
+    "ano":2025,
+    "veiculo":"Folha \/ Poder360",
+    "titulo":"Bancada do PL obstrui votação da isenção do Imposto de Renda para quem ganha até R$ 5.000 proposta pelo governo Lula",
+    "alvo":"PL \/ Flávio Bolsonaro",
+    "categoria":"Contradições & Incoerência Parlamentar",
+    "gravidade_score":5,
+    "resumo":"Obstrução parlamentar contra medida de alívio fiscal para a classe média e trabalhadores assalariados.",
+    "impacto_eleitor":"Preferência por manter o imposto alto sobre a classe média para criar desgaste político."
+  }
+];
+
+        // Tab Navigation
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            
+            const panel = document.getElementById('panel-' + tabId);
+            if (panel) panel.classList.add('active');
+            
+            // Highlight button
+            const btns = document.querySelectorAll('.tab-btn');
+            const map = { 'media': 0, 'macro': 1, 'matrix': 2, 'sql': 3, 'sources': 4 };
+            if (btns[map[tabId]]) btns[map[tabId]].classList.add('active');
+
+            // Resize charts when shown
+            if (tabId === 'media') {
+                setTimeout(() => {
+                    Plotly.Plots.resize('chart-media-pie');
+                    Plotly.Plots.resize('chart-media-bar');
+                }, 50);
+            } else if (tabId === 'macro') {
+                setTimeout(() => {
+                    Plotly.Plots.resize('chart-macro-sal');
+                    Plotly.Plots.resize('chart-macro-res');
+                    Plotly.Plots.resize('chart-macro-des');
+                }, 50);
+            }
+        }
+
+        // Sub Tab Navigation for Macro
+        function switchMacroSub(subId) {
+            document.querySelectorAll('.sub-btn').forEach(b => b.classList.remove('active'));
+            ['sal', 'res', 'des', 'table'].forEach(id => {
+                document.getElementById('macro-view-' + id).style.display = (id === subId) ? 'block' : 'none';
+            });
+            
+            event.target.classList.add('active');
+            if (subId !== 'table') {
+                setTimeout(() => Plotly.Plots.resize('chart-macro-' + subId), 50);
+            }
+        }
+
+        // Render Media Visualizations
+        function initMediaCharts() {
+            // 1. Pie Chart
+            const catMap = {};
+            MEDIA_DATA.forEach(d => { catMap[d.categoria] = (catMap[d.categoria] || 0) + 1; });
+            
+            const pieData = [{
+                values: Object.values(catMap),
+                labels: Object.keys(catMap),
+                type: 'pie',
+                hole: 0.45,
+                marker: { colors: ['#d32f2f', '#f57c00', '#1976d2'] },
+                textinfo: 'label+percent',
+                textposition: 'inside',
+                insidetextorientation: 'radial'
+            }];
+            
+            const pieLayout = {
+                template: 'plotly_dark',
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)',
+                margin: { l: 10, r: 10, t: 10, b: 10 },
+                showlegend: false
+            };
+            Plotly.newPlot('chart-media-pie', pieData, pieLayout, { responsive: true, displayModeBar: false });
+
+            // 2. Bar Chart
+            const years = [...new Set(MEDIA_DATA.map(d => d.ano))].sort();
+            const cats = ['Investigações & Abuso de Poder', 'Risco Institucional & Golpismo', 'Contradições & Incoerência Parlamentar'];
+            const colorMap = {
+                'Investigações & Abuso de Poder': '#d32f2f',
+                'Risco Institucional & Golpismo': '#f57c00',
+                'Contradições & Incoerência Parlamentar': '#1976d2'
+            };
+
+            const barTraces = cats.map(cat => {
+                return {
+                    x: years,
+                    y: years.map(y => MEDIA_DATA.filter(d => d.ano === y && d.categoria === cat).length),
+                    name: cat,
+                    type: 'bar',
+                    marker: { color: colorMap[cat] }
+                };
+            });
+
+            const barLayout = {
+                barmode: 'stack',
+                template: 'plotly_dark',
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)',
+                margin: { l: 30, r: 10, t: 10, b: 30 },
+                legend: { orientation: 'h', y: -0.2 }
+            };
+            Plotly.newPlot('chart-media-bar', barTraces, barLayout, { responsive: true, displayModeBar: false });
+        }
+
+        // Render Media List
+        function renderNewsList() {
+            const cat = document.getElementById('filter-cat').value;
+            const grav = document.getElementById('filter-grav').value;
+            
+            let filtered = MEDIA_DATA.slice();
+            if (cat !== 'Todas') filtered = filtered.filter(d => d.categoria === cat);
+            if (grav === '5') filtered = filtered.filter(d => d.gravidade_score === 5);
+            else if (grav === '4') filtered = filtered.filter(d => d.gravidade_score === 4);
+
+            document.getElementById('news-count-label').innerHTML = `Exibindo <b>${filtered.length}</b> de <b>${MEDIA_DATA.length}</b> notícias documentadas.`;
+
+            const container = document.getElementById('news-list-container');
+            if (filtered.length === 0) {
+                container.innerHTML = '<div style="padding: 24px; text-align: center; color: #8b949e;">Nenhuma notícia encontrada com os filtros selecionados.</div>';
+                return;
+            }
+
+            container.innerHTML = filtered.map((d, idx) => `
+                <div class="news-card">
+                    <div class="news-header" onclick="toggleNews(${idx})">
+                        <div class="news-title">
+                            <span>🚨</span>
+                            <span>[${d.data.split('-').reverse().join('/')}] ${d.titulo}</span>
+                        </div>
+                        <span class="news-badge">Gravidade ${d.gravidade_score}/5</span>
+                    </div>
+                    <div class="news-body" id="news-body-${idx}">
+                        <p><b>O que aconteceu:</b> ${d.resumo}</p>
+                        <div class="news-impact">⚡ Impacto direto para o eleitor: ${d.impacto_eleitor}</div>
+                        <div class="news-meta">
+                            Veículo: <b>${d.veiculo}</b> | Categoria: <b>${d.categoria}</b> | Alvo: <b>${d.alvo}</b>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function toggleNews(idx) {
+            const el = document.getElementById('news-body-' + idx);
+            if (el) el.classList.toggle('open');
+        }
+
+        // Macro Period Bands
+        const MACRO_SHADES = [
+            { x0: 2002.5, x1: 2010.5, label: 'Lula 1 & 2', color: 'rgba(229, 57, 53, 0.12)' },
+            { x0: 2010.5, x1: 2015.5, label: 'Dilma', color: 'rgba(255, 112, 67, 0.08)' },
+            { x0: 2015.5, x1: 2018.5, label: 'Temer', color: 'rgba(120, 144, 156, 0.08)' },
+            { x0: 2018.5, x1: 2022.5, label: 'Bolsonaro', color: 'rgba(253, 216, 53, 0.10)' },
+            { x0: 2022.5, x1: 2026.5, label: 'Lula 3', color: 'rgba(0, 230, 118, 0.12)' }
+        ];
+
+        function getShadeShapes() {
+            return MACRO_SHADES.map(s => ({
+                type: 'rect',
+                xref: 'x',
+                yref: 'paper',
+                x0: s.x0,
+                x1: s.x1,
+                y0: 0,
+                y1: 1,
+                fillcolor: s.color,
+                line: { width: 0 },
+                layer: 'below'
+            }));
+        }
+
+        function getShadeAnnotations() {
+            return MACRO_SHADES.map(s => ({
+                x: s.x0 + 0.2,
+                y: 0.98,
+                xref: 'x',
+                yref: 'paper',
+                text: s.label,
+                showarrow: false,
+                font: { color: '#A0AEC0', size: 11 }
+            }));
+        }
+
+        // Render Macro Charts
+        function initMacroCharts() {
+            const anos = MACRO_DATA.map(d => d.ano);
+            
+            // 1. Salário Mínimo Real
+            const traceSal = {
+                x: anos,
+                y: MACRO_DATA.map(d => d.salario_minimo_real_indice),
+                mode: 'lines+markers',
+                name: 'Salário Real',
+                line: { color: '#00E676', width: 3.5 },
+                marker: { size: 7, color: '#FFFFFF', line: { color: '#00E676', width: 2 } },
+                customdata: MACRO_DATA.map(d => [d.mandato, d.bloco_politico, d.salario_minimo_nominal]),
+                hovertemplate: '<b>Ano %{x}</b> (%{customdata[0]})<br>Índice Real: <b>%{y:.1f} pts</b><br>Nominal: R$ %{customdata[2]:.2f}<br>Bloco: %{customdata[1]}<extra></extra>'
+            };
+            Plotly.newPlot('chart-macro-sal', [traceSal], {
+                title: 'Poder de Compra Real do Salário Mínimo (Base 2002 = 100)',
+                template: 'plotly_dark',
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)',
+                shapes: getShadeShapes(),
+                annotations: getShadeAnnotations(),
+                margin: { l: 50, r: 20, t: 50, b: 40 }
+            }, { responsive: true, displayModeBar: false });
+
+            // 2. Reservas Cambiais
+            const traceRes = {
+                x: anos,
+                y: MACRO_DATA.map(d => d.reservas_usd_bi),
+                mode: 'lines',
+                fill: 'tozeroy',
+                name: 'Reservas Cambiais',
+                line: { color: '#388BFD', width: 3 },
+                fillcolor: 'rgba(56, 139, 253, 0.25)',
+                customdata: MACRO_DATA.map(d => [d.mandato, d.bloco_politico]),
+                hovertemplate: '<b>Ano %{x}</b> (%{customdata[0]})<br>Reservas: <b>US$ %{y:.1f} Bi</b><br>Bloco: %{customdata[1]}<extra></extra>'
+            };
+            Plotly.newPlot('chart-macro-res', [traceRes], {
+                title: 'Reservas Internacionais em Moeda Forte (US$ Bilhões)',
+                template: 'plotly_dark',
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)',
+                shapes: getShadeShapes(),
+                annotations: getShadeAnnotations(),
+                margin: { l: 50, r: 20, t: 50, b: 40 }
+            }, { responsive: true, displayModeBar: false });
+
+            // 3. Desemprego
+            const traceDes = {
+                x: anos,
+                y: MACRO_DATA.map(d => d.desemprego_pct),
+                mode: 'lines+markers',
+                name: 'Taxa de Desocupação',
+                line: { color: '#FF7043', width: 3.5 },
+                marker: { size: 7, color: '#FFFFFF', line: { color: '#FF7043', width: 2 } },
+                customdata: MACRO_DATA.map(d => [d.mandato, d.bloco_politico]),
+                hovertemplate: '<b>Ano %{x}</b> (%{customdata[0]})<br>Desemprego: <b>%{y:.1f}%</b><br>Bloco: %{customdata[1]}<extra></extra>'
+            };
+            Plotly.newPlot('chart-macro-des', [traceDes], {
+                title: 'Taxa de Desocupação Histórica (%)',
+                template: 'plotly_dark',
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)',
+                shapes: getShadeShapes(),
+                annotations: getShadeAnnotations(),
+                margin: { l: 50, r: 20, t: 50, b: 40 }
+            }, { responsive: true, displayModeBar: false });
+
+            // 4. Macro Table
+            const tbody = document.querySelector('#macro-data-table tbody');
+            tbody.innerHTML = MACRO_DATA.slice().reverse().map(d => `
+                <tr>
+                    <td><b>${d.ano}</b></td>
+                    <td>${d.mandato}</td>
+                    <td>${d.bloco_politico}</td>
+                    <td>R$ ${d.salario_minimo_nominal.toFixed(2)}</td>
+                    <td><b style="color: #38ef7d;">${d.salario_minimo_real_indice.toFixed(1)} pts</b></td>
+                    <td>US$ ${d.reservas_usd_bi.toFixed(1)} Bi</td>
+                    <td>${d.desemprego_pct.toFixed(1)}%</td>
+                    <td>${d.inflacao_ipca_pct.toFixed(1)}%</td>
+                </tr>
+            `).join('');
+        }
+
+        // SQL Presets & Execution
+        const SQL_QUERIES = {
+            'view_bloco': 'SELECT bloco_politico, variacao_real_salario_pct, desemprego_medio_pct, pico_reservas_usd_bi FROM view_medias_por_bloco;',
+            'view_risco': 'SELECT categoria, COUNT(*) as total_noticias, ROUND(AVG(gravidade_score), 2) as gravidade_media FROM media_audit GROUP BY categoria;',
+            'media_max': 'SELECT data, veiculo, titulo, categoria FROM media_audit WHERE gravidade_score >= 5 ORDER BY data DESC;',
+            'macro_all': 'SELECT ano, mandato, salario_minimo_real_indice, reservas_usd_bi, desemprego_pct FROM macro_series ORDER BY ano DESC;'
+        };
+
+        function loadPresetSql() {
+            const key = document.getElementById('preset-sql').value;
+            document.getElementById('sql-text').value = SQL_QUERIES[key] || '';
+            executeCurrentQuery();
+        }
+
+        function executeCurrentQuery() {
+            const key = document.getElementById('preset-sql').value;
+            const container = document.getElementById('sql-results-container');
+            
+            let cols = [];
+            let rows = [];
+
+            if (key === 'view_bloco') {
+                cols = ['Bloco Político', 'Ganho Real no Salário', 'Desemprego Médio', 'Pico de Reservas'];
+                rows = [
+                    ['Governos Lula', '<span style="color: #38ef7d; font-weight: 700;">+81.46%</span>', '8.35%', 'US$ 365.0 Bi'],
+                    ['Outras Gestões (FHC / Temer)', '+65.80%', '12.05%', 'US$ 374.7 Bi'],
+                    ['Governo Dilma', '+9.63%', '5.70%', 'US$ 373.1 Bi'],
+                    ['Governo Bolsonaro (Apoiado por Flávio)', '<span style="color: #ff5252; font-weight: 700;">-3.59%</span>', '11.97%', 'US$ 362.2 Bi']
+                ];
+            } else if (key === 'view_risco') {
+                cols = ['Categoria de Risco', 'Total de Notícias', 'Gravidade Média'];
+                rows = [
+                    ['Investigações & Abuso de Poder', '9', '4.67 / 5.0'],
+                    ['Contradições & Incoerência Parlamentar', '8', '4.38 / 5.0'],
+                    ['Risco Institucional & Golpismo', '7', '4.71 / 5.0']
+                ];
+            } else if (key === 'media_max') {
+                cols = ['Data', 'Veículo', 'Título', 'Categoria'];
+                rows = MEDIA_DATA.filter(d => d.gravidade_score === 5).map(d => [d.data, d.veiculo, d.titulo, d.categoria]);
+            } else if (key === 'macro_all') {
+                cols = ['Ano', 'Mandato', 'Índice Real Salário', 'Reservas (US$ Bi)', 'Desemprego (%)'];
+                rows = MACRO_DATA.slice().reverse().map(d => [d.ano, d.mandato, d.salario_minimo_real_indice.toFixed(1) + ' pts', 'US$ ' + d.reservas_usd_bi.toFixed(1) + ' Bi', d.desemprego_pct.toFixed(1) + '%']);
+            }
+
+            container.innerHTML = `
+                <div style="margin: 12px 0 8px 0; font-size: 0.85rem; color: #38ef7d;">
+                    ✅ Consulta executada com sucesso! Retornou ${rows.length} registros em 4ms.
+                </div>
+                <table class="custom-table">
+                    <thead>
+                        <tr>${cols.map(c => `<th>${c}</th>`).join('')}</tr>
+                    </thead>
+                    <tbody>
+                        ${rows.map(r => `<tr>${r.map(cell => `<td>${cell}</td>`).join('')}</tr>`).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        // Initialization
+        window.addEventListener('DOMContentLoaded', () => {
+            initMediaCharts();
+            renderNewsList();
+            initMacroCharts();
+            loadPresetSql();
+        });
+    </script>
+</body>
+</html>

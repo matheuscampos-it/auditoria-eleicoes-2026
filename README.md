@@ -2,6 +2,11 @@
 
 Repositório de código aberto e jornalismo de dados desenvolvido para auditar empiricamente a trajetória, as votações legislativas e os indicadores econômicos dos dois principais concorrentes no segundo turno das eleições presidenciais de 2026: **Luiz Inácio Lula da Silva** e **Flávio Bolsonaro**.
 
+> 🚀 **Acesse Online Sem Instalar Nada:**  
+> - 📊 **[Dashboard Analítico Interativo (Web Live)](https://matheuscampos-it.github.io/auditoria-eleicoes-2026/dashboard.html)**  
+> - 🔗 **[Agregador Central Linktree (GitHub Pages)](https://matheuscampos-it.github.io/auditoria-eleicoes-2026/)**  
+> - 📑 **[Dossiê de Fontes e Certidões Oficiais (Telegraph)](https://telegra.ph/Auditoria-2026-Fontes-e-Documentos-Oficiais-10-09)**
+
 ---
 
 ## 🎯 Pilares da Auditoria
@@ -26,7 +31,9 @@ Repositório de código aberto e jornalismo de dados desenvolvido para auditar e
 ```text
 Projeto Outubro/
 ├── app/
-│   └── main.py                   # Dashboard interativo analítico em Streamlit
+│   └── main.py                   # Dashboard interativo analítico em Streamlit (Local)
+├── dashboard.html                # Dashboard interativo Web nativo (GitHub Pages Live)
+├── index.html                    # Agregador Linktree oficial (GitHub Pages)
 ├── data/
 │   ├── database.duckdb           # Banco analítico colunar local de alta velocidade
 │   ├── macro_series_historica.csv # Séries temporais BACEN/IBGE (2002-2026)
@@ -37,7 +44,6 @@ Projeto Outubro/
 │   ├── extract_macro.py          # Extração e consolidação macroeconômica
 │   ├── extract_media_audit.py    # Classificação léxica e enriquecimento de notícias
 │   └── duckdb_storage.py         # Ingestão e criação de views analíticas SQL no DuckDB
-├── index.html                    # Agregador Linktree oficial (GitHub Pages)
 ├── requirements.txt              # Dependências Python (Streamlit, Plotly, DuckDB, Pandas)
 └── README.md                     # Documentação completa da auditoria
 ```
