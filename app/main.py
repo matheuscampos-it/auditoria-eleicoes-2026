@@ -432,9 +432,12 @@ elif view_mode == "🌐 Repositório de Fontes & Documentos":
     """, unsafe_allow_html=True)
     
     st.success("""
-    🔗 **Agregador Público Oficial ao Vivo:**  
+    🔗 **Linktree Oficial (Hub Unificado de Links):**  
+    👉 [https://matheuscampos-it.github.io/auditoria-eleicoes-2026/](https://matheuscampos-it.github.io/auditoria-eleicoes-2026/)  
+    *(Página de links no ar reunindo GitHub, Dossiê Telegraph e documentos oficiais)*
+    
+    📑 **Dossiê no Telegraph com todas as certidões:**  
     👉 [https://telegra.ph/Auditoria-2026-Fontes-e-Documentos-Oficiais-10-09](https://telegra.ph/Auditoria-2026-Fontes-e-Documentos-Oficiais-10-09)  
-    *(Página pública aberta contendo a relação completa de certidões, inquéritos e séries temporais)*
     """)
     
     st.markdown("""

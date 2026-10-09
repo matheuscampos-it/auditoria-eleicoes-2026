@@ -88,5 +88,5 @@ O dashboard será aberto no navegador em `http://localhost:8501`.
 - **Senado Federal:** Registros nominais de votações em [legis.senado.leg.br](https://legis.senado.leg.br).
 - **Tribunal Superior Eleitoral (TSE):** Acórdão de aplicação de multa à coligação do PL.
 - **Polícia Federal / STF:** Inquérito da Operação Vigilância Aproximada (Abin Paralela).
-- **Conselho de Controle de Atividades Financeiras (Coaf):** Relatórios de Inteligência Financeira (RIF).
-- **Agregador Público Oficial de Fontes:** [https://telegra.ph/Auditoria-2026-Fontes-e-Documentos-Oficiais-10-09](https://telegra.ph/Auditoria-2026-Fontes-e-Documentos-Oficiais-10-09)
+- **Linktree Oficial (Hub Unificado de Links):** [https://matheuscampos-it.github.io/auditoria-eleicoes-2026/](https://matheuscampos-it.github.io/auditoria-eleicoes-2026/)
+- **Dossiê no Telegraph (Certidões e Inquéritos):** [https://telegra.ph/Auditoria-2026-Fontes-e-Documentos-Oficiais-10-09](https://telegra.ph/Auditoria-2026-Fontes-e-Documentos-Oficiais-10-09)
