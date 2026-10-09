@@ -24,6 +24,12 @@ Repositório aberto e independente com dados oficiais, estatísticas do Banco Ce
    - **Abin Paralela (PF/STF):** Polícia Federal comprovou espionagem ilegal para blindar Flávio nas investigações das rachadinhas.
    - **Tribunal Superior Eleitoral (TSE):** Multa de R$ 22,9 milhões ao PL por tentar anular a eleição presidencial sem apresentar provas.
 
+3. **Alertas Institucionais: Ameaças à Democracia, Eleições & Soberania:**  
+   Módulo analítico documentando ataques sistemáticos às instituições e aos direitos da população:
+   - **Voto Popular & Urnas:** Ação do PL para anular quase 60% das urnas no 2º turno e desfile intimidatório de blindados na Praça dos Três Poderes.
+   - **Submissão a Trump & Sanções contra o Brasil:** Comitiva do PL em Washington articulando com deputados trumpistas pedidos de sanções e tarifas comerciais punitivas contra a economia brasileira.
+   - **Ameaças aos Direitos do Cidadão & ao Pix:** Pressão por custos no Pix, anistia ampla aos invasores e golpistas do 8 de Janeiro e PEC das Praias (PEC 3/2022) relatada por Flávio para privatizar terrenos de marinha.
+
 ---
 
 ## 🏗️ Estrutura do Repositório

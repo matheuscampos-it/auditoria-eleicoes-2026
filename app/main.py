@@ -69,6 +69,21 @@ st.markdown("""
         background-color: #2e7d32;
         color: white;
     }
+    /* Destaque do botão de Ameaças no Sidebar */
+    div[data-testid="stRadio"] div[role="radiogroup"] > label:nth-child(4) {
+        background: linear-gradient(135deg, rgba(218, 54, 51, 0.28) 0%, rgba(139, 0, 0, 0.45) 100%) !important;
+        border: 1px solid #f85149 !important;
+        border-radius: 8px !important;
+        padding: 8px 12px !important;
+        margin-top: 6px !important;
+        margin-bottom: 6px !important;
+        box-shadow: 0 0 10px rgba(248, 81, 73, 0.3) !important;
+    }
+    div[data-testid="stRadio"] div[role="radiogroup"] > label:nth-child(4) p {
+        font-size: 1.05rem !important;
+        font-weight: 700 !important;
+        color: #ff7b72 !important;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -103,6 +118,7 @@ view_mode = st.sidebar.radio(
         "🔍 Auditoria de Mídia: Notícias & Investigações",
         "📊 Séries Macroeconômicas (BACEN & IBGE)",
         "⚖️ Matriz de Gestão de Risco (Indecisos)",
+        "🚨 Ameaças à Democracia & Soberania",
         "💻 Terminal SQL Analítico (DuckDB Live)",
         "🌐 Repositório de Fontes & Documentos"
     ]
@@ -405,6 +421,147 @@ elif view_mode == "⚖️ Matriz de Gestão de Risco (Indecisos)":
     </table>
     </div>
     """, unsafe_allow_html=True)
+
+# ==============================================================================
+# NOVO: AMEAÇAS À DEMOCRACIA, ELEIÇÕES & SOBERANIA
+# ==============================================================================
+elif view_mode == "🚨 Ameaças à Democracia & Soberania":
+    st.markdown("""
+    <div>
+        <span class="badge-pill badge-alert" style="background-color: #d32f2f; color: white;">🚨 ALERTA INSTITUCIONAL MÁXIMO</span>
+        <span class="badge-pill badge-tech">FATOS DOCUMENTADOS & COMPROVADOS</span>
+    </div>
+    <h1 style='margin-top: 10px; color: #ff7b72;'>Ameaças à Democracia, Eleições e Soberania Nacional</h1>
+    <p style='color: #8b949e; font-size: 1.05rem;'>
+        Mapeamento factual de ações, votações no Congresso, articulações no exterior e declarações de 
+        <b>Flávio Bolsonaro, da cúpula do PL e de seus aliados diretos</b> contra o voto popular, as urnas eletrônicas, 
+        a gratuidade do Pix, a soberania econômica do Brasil e as liberdades democráticas.
+    </p>
+    """, unsafe_allow_html=True)
+    
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.markdown("""
+        <div class="metric-card" style="border-color: rgba(248, 81, 73, 0.4); background: linear-gradient(135deg, #1c1517 0%, #161b22 100%);">
+            <div class="metric-title" style="color: #ff7b72;">Ataque ao Voto Popular</div>
+            <div class="metric-value" style="color: #ff5252;">R$ 22,9 Milhões</div>
+            <div class="metric-desc">Multa máxima do TSE ao PL por tentar anular a eleição de 67M de eleitores sem provas</div>
+        </div>
+        """, unsafe_allow_html=True)
+    with col2:
+        st.markdown("""
+        <div class="metric-card" style="border-color: rgba(248, 81, 73, 0.4); background: linear-gradient(135deg, #1c1517 0%, #161b22 100%);">
+            <div class="metric-title" style="color: #ff7b72;">Submissão Externa (Trump)</div>
+            <div class="metric-value" style="color: #ffa657;">Pedidos de Sanções</div>
+            <div class="metric-desc">Viagens a Washington para pedir que os EUA imponham tarifas contra produtos brasileiros</div>
+        </div>
+        """, unsafe_allow_html=True)
+    with col3:
+        st.markdown("""
+        <div class="metric-card" style="border-color: rgba(248, 81, 73, 0.4); background: linear-gradient(135deg, #1c1517 0%, #161b22 100%);">
+            <div class="metric-title" style="color: #ff7b72;">Ameaças ao Cidadão & ao Pix</div>
+            <div class="metric-value" style="color: #f0f6fc;">Tarifas & Riscos</div>
+            <div class="metric-desc">Pressão por tarifação de transações do Pix, PEC das Praias e anistia aos golpistas do 8/1</div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+    st.info("""
+    ⚠️ **Por que isso importa para quem vota?**  
+    A democracia não é apenas um conceito abstrato: é a garantia de que o seu voto decide o futuro do país, de que seu dinheiro no Pix continua gratuito sem tarifas bancárias, de que as praias públicas continuam abertas a todos e de que governantes estrangeiros não impõem taxas sobre as empresas e os trabalhadores do Brasil.
+    """)
+    
+    st.markdown("<h3 style='color: #f0f6fc; margin-top: 20px;'>🚨 Dossiê Factual de Ameaças e Atentados Institucionais</h3>", unsafe_allow_html=True)
+    
+    threats_data = [
+        {
+            "badge": "VOTO POPULAR",
+            "titulo": "Ação do PL para Anular os Votos de Quase 60% das Urnas Eletrônicas",
+            "data": "23/11/2022",
+            "fontes": "Tribunal Superior Eleitoral (TSE) / G1 / Poder360",
+            "gravidade": "5.0 / 5.0",
+            "acontecido": "O PL de Valdemar Costa Neto e Flávio Bolsonaro ingressou com representação no TSE pedindo a anulação dos votos de quase 60% das urnas eletrônicas apenas no segundo turno presidencial, sob a alegação sem provas de falhas em modelos de urnas fabricadas antes de 2020. O partido validou os resultados do primeiro turno nas mesmíssimas urnas, onde elegeu a maior bancada de deputados e senadores da história. O TSE multou a coligação em R$ 22,9 milhões por litigância de má-fé.",
+            "impacto": "Tentativa explícita de jogar no lixo e anular os votos válidos de mais de 67 milhões de cidadãos brasileiros que compareceram às urnas para escolher livremente seu presidente.",
+            "busca": "moraes multa pl 22 milhoes urnas eletronicas"
+        },
+        {
+            "badge": "SOBERANIA & TRUMP",
+            "titulo": "Comitiva do PL nos EUA Articula Sanções e Tarifas Contra a Economia do Brasil",
+            "data": "Março/2024 a 2026",
+            "fontes": "O Globo / CNN Brasil / Folha de S.Paulo / BBC",
+            "gravidade": "5.0 / 5.0",
+            "acontecido": "Parlamentares da cúpula do PL e aliados do clã Bolsonaro (com apoio da bancada de Flávio) realizaram viagens a Washington para se reunir com parlamentares trumpistas da extrema-direita americana. Em audiências no Congresso dos EUA, pediram abertamente sanções econômicas, tarifas de importação contra produtos brasileiros e suspensão de vistos de autoridades judiciais brasileiras.",
+            "impacto": "Articular sanções e taxas contra o próprio país ameaça diretamente os empregos no agronegócio e na indústria brasileira, reduz exportações e encarece o custo de vida do trabalhador em troca de interesses pessoais e familiares.",
+            "busca": "comitiva pl estados unidos sancoes brasil eduardo bolsonaro"
+        },
+        {
+            "badge": "SEU BOLSO & PIX",
+            "titulo": "Campanhas de Desinformação e Pressão por Tarifação de Transações do Pix",
+            "data": "2022 a 2025",
+            "fontes": "UOL Economia / Valor Econômico / Banco Central do Brasil",
+            "gravidade": "4.5 / 5.0",
+            "acontecido": "O Pix foi planejado e desenvolvido pelo corpo técnico concursado do Banco Central para ser uma infraestrutura pública totalmente gratuita para a população. Setores políticos e parlamentares ligados ao sistema financeiro tradicional mantiveram pressão constante por cobrança de taxas em operações digitais, além de alimentar desinformação massiva nas redes sociais tentando atrelar o Pix a ameaças de confisco.",
+            "impacto": "Risco de que transferências instantâneas gratuitas — que libertaram mais de 150 milhões de brasileiros de taxas abusivas de TED e DOC (que custavam até R$ 20 por envio) — venham a sofrer custos, tarifas ou restrições de uso.",
+            "busca": "pix gratuito banco central taxacao fake news"
+        },
+        {
+            "badge": "INTIMIDAÇÃO",
+            "titulo": "Desfile Inédito de Blindados na Praça dos Três Poderes em Dia de Votação",
+            "data": "10/08/2021",
+            "fontes": "BBC News Brasil / Folha de S.Paulo / G1",
+            "gravidade": "5.0 / 5.0",
+            "acontecido": "No mesmo dia em que o plenário da Câmara dos Deputados votava a Proposta de Emenda à Constituição (PEC) do Voto Impresso — bandeira ostensiva da família Bolsonaro para questionar a lisura das eleições —, blindados, tanques e veículos da Marinha realizaram um desfile com fumaça preta em frente ao Congresso Nacional e ao Palácio do Planalto.",
+            "impacto": "Tentativa inaceitável de usar as Forças Armadas para coagir os representantes eleitos pelo povo na hora de votar leis de interesse da sociedade.",
+            "busca": "desfile blindados congresso voto impresso 2021"
+        },
+        {
+            "badge": "GOLPISMO & 8/1",
+            "titulo": "Articulação da Bancada do PL no Congresso para Anistiar Invasores do 8 de Janeiro",
+            "data": "2024 a 2026",
+            "fontes": "Agência Senado / G1 / Folha de S.Paulo",
+            "gravidade": "5.0 / 5.0",
+            "acontecido": "Flávio Bolsonaro e as principais lideranças do PL assumiram o papel de articuladores no Senado e na Câmara do projeto de lei de anistia ampla para os réus e condenados pelo STF pela destruição dos prédios do Congresso Nacional, Supremo Tribunal Federal e Palácio do Planalto no dia 8 de janeiro de 2023, tentando blindar inclusive mentores intelectuais dos atos antidemocráticos.",
+            "impacto": "Abre um precedente perigoso de impunidade, sinalizando que qualquer facção política derrotada nas urnas pode invadir sedes dos Poderes e tentar golpes de Estado sem responder perante a lei.",
+            "busca": "flavio bolsonaro pl anistia 8 de janeiro senado"
+        },
+        {
+            "badge": "AUTORITARISMO",
+            "titulo": "Declarações Reiteradas de 'Novo AI-5' e Fechamento do Supremo com 'Cabo e Soldado'",
+            "data": "2018 a 2023",
+            "fontes": "O Globo / Estadão / CNN Brasil",
+            "gravidade": "5.0 / 5.0",
+            "acontecido": "O clã e deputados do núcleo bolsonarista manifestaram diversas vezes a defesa explícita de medidas ditatoriais. Eduardo Bolsonaro declarou em entrevista que 'se a esquerda radicalizar, a resposta pode ser via um novo AI-5', além do vídeo afirmando que 'para fechar o STF basta um soldado e um cabo'. Flávio e o PL mantiveram apoio irrestrito a essas figuras e integraram palanques que pediam fechamento de tribunais.",
+            "impacto": "Ameaça às liberdades civis mais fundamentais: direito de ir e vir, liberdade de culto, livre manifestação de pensamento e direito de não ser preso arbitrariamente sem mandado judicial.",
+            "busca": "eduardo bolsonaro novo ai-5 cabo e soldado stf"
+        },
+        {
+            "badge": "DIREITO PÚBLICO",
+            "titulo": "PEC das Praias (PEC 3/2022): Relatada por Flávio para Privatizar Terrenos de Marinha",
+            "data": "Maio/2024",
+            "fontes": "Senado Federal / G1 / Folha de S.Paulo",
+            "gravidade": "4.5 / 5.0",
+            "acontecido": "Flávio Bolsonaro atuou como relator da PEC 3/2022 na Comissão de Constituição e Justiça (CCJ) do Senado, emitindo parecer favorável à transferência da propriedade de terrenos de marinha da União para ocupantes particulares. Especialistas ambientais e o Ministério do Meio Ambiente alertaram que o texto abre brechas jurídicas para o cercamento e privatização de faixas de litoral por empreendimentos de luxo.",
+            "impacto": "Risco de fechamento de praias públicas brasileiras para o povo comum e para famílias que usufruem do lazer gratuito no litoral, transformando patrimônio nacional em áreas restritas para bilionários.",
+            "busca": "senado flavio bolsonaro pec das praias terrenos de marinha"
+        },
+        {
+            "badge": "VIGILÂNCIA ILEGAL",
+            "titulo": "Abin Paralela Usou Software FirstMile para Espionar Cidadãos e Servidores",
+            "data": "Outubro/2023 a Julho/2024",
+            "fontes": "Polícia Federal / Supremo Tribunal Federal / G1",
+            "gravidade": "5.0 / 5.0",
+            "acontecido": "A Operação Vigilância Aproximada da PF revelou que a direção da Abin montou uma estrutura clandestina para monitorar a geolocalização de mais de 30 mil celulares sem ordem judicial. As investigações comprovaram que a ferramenta foi usada para espionar adversários políticos, jornalistas e auditores fiscais da Receita Federal que atuavam no caso das rachadinhas de Flávio Bolsonaro.",
+            "impacto": "Perigo de viver em um Estado de vigilância clandestina onde a máquina pública de espionagem é voltada contra os próprios cidadãos e servidores públicos para proteger interesses de familiares de governantes.",
+            "busca": "operacao vigilancia aproximada abin firstmile policia federal"
+        }
+    ]
+    
+    for item in threats_data:
+        with st.expander(f"🚨 [{item['badge']}] {item['titulo']}"):
+            st.markdown(f"**Data:** {item['data']} | **Fontes:** {item['fontes']} | **Gravidade:** `{item['gravidade']}`")
+            st.markdown(f"**O que aconteceu:** {item['acontecido']}")
+            st.markdown(f"**⚡ Impacto direto para o eleitor:** `{item['impacto']}`")
+            busca_url = f"https://www.google.com/search?q={urllib.parse.quote_plus(item['busca'])}"
+            st.markdown(f"[🔗 Verificar Notícia na Íntegra (Google Notícias)]({busca_url})")
 
 # ==============================================================================
 # 4. TERMINAL SQL ANALÍTICO (DUCKDB LIVE)
