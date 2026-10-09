@@ -197,11 +197,13 @@ if view_mode == "🔍 Auditoria de Mídia: Notícias & Investigações":
     st.markdown("---")
     st.markdown("### 📋 Ficha Factual Detalhada das Notícias")
     
-    col_f1, col_f2 = st.columns(2)
+    col_f1, col_f2, col_f3 = st.columns([1, 1, 1.2])
     with col_f1:
         filtro_cat = st.selectbox("Filtrar por Categoria:", ["Todas"] + list(df_media["categoria"].unique()))
     with col_f2:
         filtro_grav = st.selectbox("Filtrar por Gravidade:", ["Todas", "Gravidade Máxima (5/5)", "Gravidade Alta (4/5)"])
+    with col_f3:
+        termo_busca = st.text_input("Buscar nos Fatos:", placeholder="Ex: mansão, abin, salário...")
         
     df_filtrado = df_media.copy()
     if filtro_cat != "Todas":
@@ -210,8 +212,16 @@ if view_mode == "🔍 Auditoria de Mídia: Notícias & Investigações":
         df_filtrado = df_filtrado[df_filtrado["gravidade_score"] == 5]
     elif filtro_grav == "Gravidade Alta (4/5)":
         df_filtrado = df_filtrado[df_filtrado["gravidade_score"] == 4]
+    if termo_busca:
+        termo = termo_busca.lower().strip()
+        df_filtrado = df_filtrado[
+            df_filtrado["titulo"].str.lower().str.contains(termo, na=False) |
+            df_filtrado["resumo"].str.lower().str.contains(termo, na=False) |
+            df_filtrado["veiculo"].str.lower().str.contains(termo, na=False) |
+            df_filtrado["impacto_eleitor"].str.lower().str.contains(termo, na=False)
+        ]
         
-    st.caption(f"Exibindo **{len(df_filtrado)}** de **{len(df_media)}** investigações e fatos catalogados.")
+    st.caption(f"Exibindo **{len(df_filtrado)}** de **{len(df_media)}** fatos catalogados.")
     
     if df_filtrado.empty:
         st.info("Nenhuma ocorrência encontrada para a combinação de filtros selecionada.")
@@ -220,7 +230,10 @@ if view_mode == "🔍 Auditoria de Mídia: Notícias & Investigações":
             with st.expander(f"🚨 [{row['data'].strftime('%d/%m/%Y')}] {row['titulo']}"):
                 st.markdown(f"**O que aconteceu:** {row['resumo']}")
                 st.markdown(f"**⚡ Impacto direto para o eleitor:** `{row['impacto_eleitor']}`")
-                st.caption(f"Fonte: {row['veiculo']} | Categoria: {row['categoria']} | Gravidade: {row['gravidade_score']}/5 | Fonte Primária: Documento Oficial")
+                st.caption(f"Veículo: {row['veiculo']} | Categoria: {row['categoria']} | Gravidade: {row['gravidade_score']}/5 | Alvo: {row['alvo']}")
+                import urllib.parse
+                busca_url = f"https://www.google.com/search?q={urllib.parse.quote_plus(str(row['titulo']) + ' ' + str(row['veiculo']))}"
+                st.markdown(f"[🔗 Verificar Notícia na Íntegra (Google Notícias)]({busca_url})")
 
 # ==============================================================================
 # 2. SÉRIES MACROECONÔMICAS (BACEN & IBGE)

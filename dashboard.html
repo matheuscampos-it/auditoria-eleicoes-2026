@@ -230,8 +230,46 @@
         @media (max-width: 900px) {
             .chart-grid { grid-template-columns: 1fr; }
             .app-layout { flex-direction: column; }
-            .sidebar { width: 100%; border-right: none; border-bottom: 1px solid #30363d; }
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid #30363d;
+                padding: 10px 14px;
+                flex-direction: row;
+                overflow-x: auto;
+                white-space: nowrap;
+                gap: 8px;
+                position: sticky;
+                top: 57px;
+                z-index: 999;
+                background-color: #161b22;
+                -webkit-overflow-scrolling: touch;
+            }
+            .sidebar::-webkit-scrollbar { height: 4px; }
+            .sidebar::-webkit-scrollbar-thumb { background: #30363d; border-radius: 4px; }
+            .sidebar-title { display: none; }
+            .sidebar-footer { display: none; }
+            .tab-btn {
+                flex: 0 0 auto;
+                padding: 8px 14px;
+                font-size: 0.85rem;
+                border-radius: 20px;
+                border-left: none;
+            }
+            .tab-btn.active {
+                border-left: none;
+                background-color: #1f6feb;
+                color: #ffffff;
+            }
             .main-content { padding: 20px 16px; }
+            .metric-grid { grid-template-columns: 1fr; }
+            .sub-nav { overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; }
+            .sub-btn { flex: 0 0 auto; }
+        }
+        @media (max-width: 480px) {
+            .brand span { font-size: 0.95rem; }
+            .top-nav { padding: 10px 14px; }
+            .nav-btn { padding: 5px 10px; font-size: 0.78rem; }
         }
 
         /* Sub Tabs */
@@ -276,6 +314,8 @@
             font-weight: 600;
             color: #f0f6fc;
             background-color: #161b22;
+            user-select: none;
+            transition: background 0.2s;
         }
         .news-header:hover { background-color: #1c2128; }
         .news-title {
@@ -291,6 +331,17 @@
             border-radius: 6px;
             font-size: 0.78rem;
             font-weight: 700;
+        }
+        .news-chevron {
+            color: #8b949e;
+            font-size: 0.75rem;
+            margin-left: 6px;
+            transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-block;
+        }
+        .news-header.open .news-chevron {
+            transform: rotate(180deg);
+            color: #58a6ff;
         }
         .news-body {
             padding: 18px 20px;
@@ -316,10 +367,31 @@
             color: #8b949e;
             margin-top: 10px;
         }
+        .news-source-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 12px;
+            padding: 6px 14px;
+            background-color: #21262d;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            color: #58a6ff;
+            font-size: 0.82rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .news-source-btn:hover {
+            background-color: #1f6feb22;
+            border-color: #58a6ff;
+            color: #79c0ff;
+        }
 
         /* Table */
         .custom-table {
             width: 100%;
+            min-width: 650px;
             border-collapse: collapse;
             background-color: #161b22;
             border-radius: 10px;
@@ -327,6 +399,9 @@
             border: 1px solid #30363d;
             font-size: 0.92rem;
             margin-top: 16px;
+        }
+        #panel-matrix .custom-table {
+            min-width: 780px;
         }
         .custom-table th {
             background-color: #21262d;
@@ -513,6 +588,10 @@
                             <option value="5">Gravidade Máxima (5/5)</option>
                             <option value="4">Gravidade Alta (4/5)</option>
                         </select>
+                    </div>
+                    <div style="flex: 1; min-width: 220px;">
+                        <label style="font-size: 0.85rem; color: #8b949e; display: block; margin-bottom: 4px;">Buscar nos Fatos:</label>
+                        <input type="text" id="filter-search" class="select-box" style="width: 100%;" placeholder="Buscar por palavra-chave (ex: mansão, abin, salário)..." oninput="renderNewsList()">
                     </div>
                     <div style="margin-left: auto; color: #8b949e; font-size: 0.88rem;" id="news-count-label">
                         Carregando notícias...
@@ -1312,10 +1391,14 @@
         function switchMacroSub(subId) {
             document.querySelectorAll('.sub-btn').forEach(b => b.classList.remove('active'));
             ['sal', 'res', 'des', 'table'].forEach(id => {
-                document.getElementById('macro-view-' + id).style.display = (id === subId) ? 'block' : 'none';
+                const el = document.getElementById('macro-view-' + id);
+                if (el) el.style.display = (id === subId) ? 'block' : 'none';
             });
             
-            event.target.classList.add('active');
+            const subMap = { 'sal': 0, 'res': 1, 'des': 2, 'table': 3 };
+            const allBtns = document.querySelectorAll('.sub-btn');
+            if (allBtns[subMap[subId]]) allBtns[subMap[subId]].classList.add('active');
+
             if (subId !== 'table') {
                 setTimeout(() => Plotly.Plots.resize('chart-macro-' + subId), 50);
             }
@@ -1381,28 +1464,48 @@
         function renderNewsList() {
             const cat = document.getElementById('filter-cat').value;
             const grav = document.getElementById('filter-grav').value;
+            const search = (document.getElementById('filter-search')?.value || '').toLowerCase().trim();
             
             let filtered = MEDIA_DATA.slice();
             if (cat !== 'Todas') filtered = filtered.filter(d => d.categoria === cat);
             if (grav === '5') filtered = filtered.filter(d => d.gravidade_score === 5);
             else if (grav === '4') filtered = filtered.filter(d => d.gravidade_score === 4);
 
-            document.getElementById('news-count-label').innerHTML = `Exibindo <b>${filtered.length}</b> de <b>${MEDIA_DATA.length}</b> notícias documentadas.`;
+            if (search) {
+                filtered = filtered.filter(d => 
+                    d.titulo.toLowerCase().includes(search) || 
+                    d.resumo.toLowerCase().includes(search) ||
+                    d.veiculo.toLowerCase().includes(search) ||
+                    d.impacto_eleitor.toLowerCase().includes(search)
+                );
+            }
+
+            document.getElementById('news-count-label').innerHTML = `Exibindo <b>${filtered.length}</b> de <b>${MEDIA_DATA.length}</b> fatos catalogados.`;
 
             const container = document.getElementById('news-list-container');
             if (filtered.length === 0) {
-                container.innerHTML = '<div style="padding: 24px; text-align: center; color: #8b949e;">Nenhuma notícia encontrada com os filtros selecionados.</div>';
+                container.innerHTML = `
+                    <div style="padding: 32px; text-align: center; color: #8b949e; background: #161b22; border-radius: 10px; border: 1px dashed #30363d;">
+                        Nenhum fato encontrado com os filtros selecionados.<br>
+                        <button onclick="clearNewsFilters()" class="nav-btn" style="margin-top: 14px; cursor: pointer;">Limpar Filtros</button>
+                    </div>
+                `;
                 return;
             }
 
-            container.innerHTML = filtered.map((d, idx) => `
+            container.innerHTML = filtered.map((d, idx) => {
+                const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(d.titulo + ' ' + d.veiculo)}`;
+                return `
                 <div class="news-card">
-                    <div class="news-header" onclick="toggleNews(${idx})">
+                    <div class="news-header" id="news-header-${idx}" onclick="toggleNews(${idx})">
                         <div class="news-title">
                             <span>🚨</span>
                             <span>[${d.data.split('-').reverse().join('/')}] ${d.titulo}</span>
                         </div>
-                        <span class="news-badge">Gravidade ${d.gravidade_score}/5</span>
+                        <div style="display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
+                            <span class="news-badge">Gravidade ${d.gravidade_score}/5</span>
+                            <span class="news-chevron" id="news-chevron-${idx}">▼</span>
+                        </div>
                     </div>
                     <div class="news-body" id="news-body-${idx}">
                         <p><b>O que aconteceu:</b> ${d.resumo}</p>
@@ -1410,14 +1513,30 @@
                         <div class="news-meta">
                             Veículo: <b>${d.veiculo}</b> | Categoria: <b>${d.categoria}</b> | Alvo: <b>${d.alvo}</b>
                         </div>
+                        <div>
+                            <a href="${searchUrl}" target="_blank" rel="noopener noreferrer" class="news-source-btn">
+                                🔗 Verificar Notícia na Íntegra (Google Notícias) ↗
+                            </a>
+                        </div>
                     </div>
                 </div>
-            `).join('');
+                `;
+            }).join('');
+        }
+
+        function clearNewsFilters() {
+            document.getElementById('filter-cat').value = 'Todas';
+            document.getElementById('filter-grav').value = 'Todas';
+            const sInput = document.getElementById('filter-search');
+            if (sInput) sInput.value = '';
+            renderNewsList();
         }
 
         function toggleNews(idx) {
-            const el = document.getElementById('news-body-' + idx);
-            if (el) el.classList.toggle('open');
+            const body = document.getElementById('news-body-' + idx);
+            const header = document.getElementById('news-header-' + idx);
+            if (body) body.classList.toggle('open');
+            if (header) header.classList.toggle('open');
         }
 
         // Macro Period Bands
@@ -1605,6 +1724,16 @@
             renderNewsList();
             initMacroCharts();
             loadPresetSql();
+        });
+
+        // Global Chart Resize on Orientation Change / Window Resize
+        window.addEventListener('resize', () => {
+            ['chart-media-pie', 'chart-media-bar', 'chart-macro-sal', 'chart-macro-res', 'chart-macro-des'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el && el.offsetParent !== null) {
+                    Plotly.Plots.resize(id);
+                }
+            });
         });
     </script>
 </body>

@@ -165,6 +165,43 @@
             margin: 18px 0 6px 8px;
             font-weight: 700;
         }
+        .live-pill {
+            background: #238636;
+            color: #ffffff;
+            font-size: 0.68rem;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: 12px;
+            letter-spacing: 0.05em;
+            display: inline-block;
+            margin-left: 6px;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(46, 160, 67, 0.7); }
+            70% { box-shadow: 0 0 0 6px rgba(46, 160, 67, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(46, 160, 67, 0); }
+        }
+        .share-btn {
+            background-color: #21262d;
+            border: 1px solid #30363d;
+            color: #c9d1d9;
+            padding: 10px 18px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 24px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .share-btn:hover {
+            background-color: #30363d;
+            border-color: #58a6ff;
+            color: #58a6ff;
+        }
         footer {
             margin-top: 40px;
             text-align: center;
@@ -196,6 +233,10 @@
             Plataforma independente de jornalismo de dados e código aberto. Séries temporais oficiais, NLP de notícias e banco DuckDB para o 2º Turno.
         </p>
 
+        <button class="share-btn" onclick="copyHubLink()" id="btn-copy-hub">
+            📋 Compartilhar / Copiar Link do Hub
+        </button>
+
         <!-- Links Principais -->
         <div class="links-group">
             
@@ -205,7 +246,9 @@
             <a href="dashboard.html" class="link-card" style="border-color: #388bfd; background: linear-gradient(135deg, #161b22 0%, #102038 100%); box-shadow: 0 0 15px rgba(56, 139, 253, 0.25);">
                 <div class="link-icon">📊</div>
                 <div class="link-text">
-                    <div class="link-title" style="color: #58a6ff;">Dashboard Analítico Interativo (Web Live)</div>
+                    <div class="link-title" style="color: #58a6ff;">
+                        Dashboard Analítico Interativo (Web) <span class="live-pill">AO VIVO</span>
+                    </div>
                     <div class="link-desc">Gráficos de séries temporais do BACEN/IBGE, inquéritos e matriz de decisão.</div>
                 </div>
                 <div class="link-arrow" style="color: #58a6ff;">→</div>
@@ -344,5 +387,24 @@
             <p style="margin-top: 6px;">Desenvolvido por <a href="https://github.com/matheuscampos-it" target="_blank" rel="noopener noreferrer">Matheus Campos</a></p>
         </footer>
     </div>
+
+    <script>
+        function copyHubLink() {
+            const url = window.location.href;
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(url).then(() => {
+                    const btn = document.getElementById('btn-copy-hub');
+                    btn.innerHTML = '✅ Link Copiado para a Área de Transferência!';
+                    btn.style.borderColor = '#2ea043';
+                    btn.style.color = '#38ef7d';
+                    setTimeout(() => {
+                        btn.innerHTML = '📋 Compartilhar / Copiar Link do Hub';
+                        btn.style.borderColor = '#30363d';
+                        btn.style.color = '#c9d1d9';
+                    }, 2500);
+                });
+            }
+        }
+    </script>
 </body>
 </html>
