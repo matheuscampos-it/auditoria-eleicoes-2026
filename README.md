@@ -104,9 +104,9 @@ O dashboard será aberto no navegador em `http://localhost:8501`.
 - **Privatização da Eletrobras (MP 1031/2021):** [Poder360 - Painel Nominal de Votação](https://www.poder360.com.br/congresso/saiba-como-votou-cada-partido-e-senador-na-mp-da-capitalizacao-da-eletrobras/) e [Senado Federal - Ficha da MP](https://www25.senado.leg.br/web/atividade/materias/-/materia/148419).
 - **PEC das Praias (PEC 3/2022):** [Senado Federal - Tramitação](https://www25.senado.leg.br/web/atividade/materias/-/materia/151923).
 - **Teto de Gastos (EC 95/2016):** [Câmara dos Deputados](https://www.camara.leg.br/propostas-legislativas/2088351).
-- **Inquérito da Abin Paralela:** [G1 / PF - Espionagem de Auditores da Receita Federal](https://g1.globo.com/politica/noticia/2024/07/11/abin-espionou-auditores-da-receita-federal-que-apuravam-possivel-rachadinha-de-flavio-bolsonaro-diz-pf.ghtml).
+- **Inquérito da Abin Paralela:** [Poder360 / PF - Abin atuou ilegalmente em favor de Flávio Bolsonaro](https://www.poder360.com.br/poder-justica/abin-atuou-ilegalmente-em-favor-de-renan-e-flavio-bolsonaro-diz-pf/).
 - **Gravação no Palácio do Planalto:** [CNN Brasil - Áudio de Reunião com Ramagem e Bolsonaro](https://www.cnnbrasil.com.br/politica/integra-gravacao-bolsonaro-ramagem/).
-- **Mansão no Lago Sul de R$ 6 Milhões:** [Jornal Nacional - Compra e Financiamento no BRB](https://g1.globo.com/jornal-nacional/noticia/2021/03/02/flavio-bolsonaro-compra-casa-de-quase-r-6-milhoes-em-area-nobre-de-brasilia.ghtml).
-- **48 Depósitos Fracionados:** [Jornal Nacional - Relatório do Coaf na Alerj](https://g1.globo.com/jornal-nacional/noticia/2019/01/18/jn-tem-acesso-a-relatorio-do-coaf-sobre-movimentacoes-de-flavio-bolsonaro.ghtml).
-- **Loja de Chocolates & MP-RJ:** [Jornal Nacional - Perícia de Lavagem de Capitais](https://g1.globo.com/jornal-nacional/noticia/2019/12/19/investigacao-que-envolve-flavio-bolsonaro-aponta-indicios-de-lavagem-de-dinheiro.ghtml).
-- **Multa por Litigância de Má-Fé contra Urnas:** [G1 / TSE - Decisão de Multa de R$ 22,9M ao PL](https://g1.globo.com/politica/noticia/2022/11/23/moraes-decisao-pl-relatorio-urnas.ghtml).
+- **Mansão no Lago Sul de R$ 6 Milhões:** [CNN Brasil - Compra e Financiamento da Mansão](https://www.cnnbrasil.com.br/politica/flavio-bolsonaro-compra-mansao-avaliada-em-r-6-milhoes-em-brasilia/).
+- **48 Depósitos Fracionados:** [Folha de S.Paulo - Coaf aponta 48 depósitos suspeitos na conta de Flávio](https://www1.folha.uol.com.br/poder/2019/01/coaf-aponta-48-depositos-suspeitos-na-conta-de-flavio-bolsonaro.shtml).
+- **Loja de Chocolates & MP-RJ:** [Estadão - Investigação apura se loja de chocolates lavou dinheiro](https://www.estadao.com.br/politica/investigacao-apura-se-loja-de-flavio-bolsonaro-lavou-r-2-1-milhoes/).
+- **Multa por Litigância de Má-Fé contra Urnas:** [Poder360 / TSE - Decisão de Multa de R$ 22,9M ao PL](https://www.poder360.com.br/justica/tse-mantem-multa-de-r-229-milhoes-ao-pl/).
