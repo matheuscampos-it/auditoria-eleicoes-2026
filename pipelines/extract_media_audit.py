@@ -345,8 +345,10 @@ def save_media_audit_datasets():
     csv_path = os.path.join(DATA_DIR, "media_audit_dataset.csv")
     json_path = os.path.join(DATA_DIR, "media_audit_dataset.json")
     
-    df_media.to_csv(csv_path, index=False, encoding="utf-8")
-    df_media.to_json(json_path, orient="records", indent=2, force_ascii=False)
+    df_to_save = df_media.copy()
+    df_to_save["data"] = df_to_save["data"].dt.strftime("%Y-%m-%d")
+    df_to_save.to_csv(csv_path, index=False, encoding="utf-8")
+    df_to_save.to_json(json_path, orient="records", indent=2, force_ascii=False)
     
     logging.info(f"Dataset de auditoria de mídia salvo com sucesso em {csv_path}")
     return df_media

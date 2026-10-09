@@ -37,6 +37,7 @@ Projeto Outubro/
 │   ├── extract_macro.py          # Extração e consolidação macroeconômica
 │   ├── extract_media_audit.py    # Classificação léxica e enriquecimento de notícias
 │   └── duckdb_storage.py         # Ingestão e criação de views analíticas SQL no DuckDB
+├── index.html                    # Agregador Linktree oficial (GitHub Pages)
 ├── requirements.txt              # Dependências Python (Streamlit, Plotly, DuckDB, Pandas)
 └── README.md                     # Documentação completa da auditoria
 ```

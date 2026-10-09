@@ -1,6 +1,6 @@
 [
   {
-    "data":1544054400000,
+    "data":"2018-12-06",
     "ano":2018,
     "veiculo":"Estadão \/ Folha",
     "titulo":"Relatório do Coaf aponta movimentação atípica de R$ 1,2 milhão de Fabrício Queiroz, ex-assessor de Flávio Bolsonaro",
@@ -11,7 +11,7 @@
     "impacto_eleitor":"Demonstra suspeita de apropriação indevida de dinheiro público por mais de uma década."
   },
   {
-    "data":1547769600000,
+    "data":"2019-01-18",
     "ano":2019,
     "veiculo":"Jornal Nacional \/ TV Globo",
     "titulo":"Coaf revela 48 depósitos em dinheiro vivo em um único mês na conta bancária de Flávio Bolsonaro",
@@ -22,7 +22,7 @@
     "impacto_eleitor":"Evidência clara de manobras para ocultação de patrimônio e lavagem de capitais."
   },
   {
-    "data":1563235200000,
+    "data":"2019-07-16",
     "ano":2019,
     "veiculo":"G1 \/ Folha",
     "titulo":"Defesa de Flávio Bolsonaro recorre ao STF e consegue suspender todas as investigações sobre Queiroz e Coaf",
@@ -33,7 +33,7 @@
     "impacto_eleitor":"Contradição frontal com o slogan de 'quem não deve não teme'."
   },
   {
-    "data":1576627200000,
+    "data":"2019-12-18",
     "ano":2019,
     "veiculo":"UOL \/ MP-RJ",
     "titulo":"MP-RJ aponta que loja de chocolates de Flávio Bolsonaro era usada para lavar até R$ 1,6 milhão em dinheiro vivo",
@@ -44,7 +44,7 @@
     "impacto_eleitor":"Método clássico de lavagem de dinheiro envolvendo comércios de fachada."
   },
   {
-    "data":1592438400000,
+    "data":"2020-06-18",
     "ano":2020,
     "veiculo":"G1 \/ Folha \/ Estadão",
     "titulo":"Fabrício Queiroz é preso em imóvel de Frederick Wassef, advogado da família Bolsonaro, em Atibaia",
@@ -55,7 +55,7 @@
     "impacto_eleitor":"Mostra a tentativa deliberada de obstrução de Justiça e ocultação de testemunha-chave."
   },
   {
-    "data":1604448000000,
+    "data":"2020-11-04",
     "ano":2020,
     "veiculo":"Ministério Público do RJ",
     "titulo":"MP do Rio denuncia formalmente Flávio Bolsonaro por peculato, lavagem de dinheiro e organização criminosa",
@@ -66,7 +66,7 @@
     "impacto_eleitor":"Fatos criminais detalhados em inquérito oficial, não meras acusações políticas."
   },
   {
-    "data":1614556800000,
+    "data":"2021-03-01",
     "ano":2021,
     "veiculo":"O Globo \/ Metrópoles",
     "titulo":"Flávio Bolsonaro compra mansão de luxo de R$ 6 milhões em bairro nobre de Brasília com renda parlamentar",
@@ -77,7 +77,7 @@
     "impacto_eleitor":"Desconexão gritante com a realidade econômica do trabalhador brasileiro que ganha salário mínimo."
   },
   {
-    "data":1636416000000,
+    "data":"2021-11-09",
     "ano":2021,
     "veiculo":"STJ \/ ConJur",
     "titulo":"STJ anula quebras de sigilo e decisões do caso das rachadinhas de Flávio Bolsonaro por questões processuais",
@@ -88,7 +88,7 @@
     "impacto_eleitor":"Vitória jurídica por foro e tecnicismo, não por comprovação de inocência."
   },
   {
-    "data":1706140800000,
+    "data":"2024-01-25",
     "ano":2024,
     "veiculo":"Polícia Federal \/ G1",
     "titulo":"PF aponta uso da Abin paralela para produzir relatórios sigilosos destinados a blindar Flávio Bolsonaro no caso Queiroz",
@@ -99,7 +99,7 @@
     "impacto_eleitor":"Aparelhamento explícito da máquina do Estado para interesse familiar e impunidade."
   },
   {
-    "data":1540080000000,
+    "data":"2018-10-21",
     "ano":2018,
     "veiculo":"Folha de S.Paulo",
     "titulo":"Eduardo e Flávio Bolsonaro endossam discurso contra o STF: 'Para fechar o Supremo basta um soldado e um cabo'",
@@ -110,7 +110,7 @@
     "impacto_eleitor":"Desprezo aberto pelas regras do jogo democrático e separação de poderes."
   },
   {
-    "data":1572480000000,
+    "data":"2019-10-31",
     "ano":2019,
     "veiculo":"Congresso em Foco \/ UOL",
     "titulo":"Clã Bolsonaro flerta abertamente com retorno do AI-5 em caso de manifestações populares no Brasil",
@@ -121,7 +121,7 @@
     "impacto_eleitor":"Mostra a predisposição a cassar direitos civis e liberdades individuais da população."
   },
   {
-    "data":1628553600000,
+    "data":"2021-08-10",
     "ano":2021,
     "veiculo":"O Globo \/ CNN Brasil",
     "titulo":"Bancada governista e Flávio pressionam por desfile militar de tanques na Esplanada no dia da votação do voto impresso",
@@ -132,7 +132,7 @@
     "impacto_eleitor":"Uso de intimidação e força para coagir o parlamento a votar de acordo com seus interesses."
   },
   {
-    "data":1669161600000,
+    "data":"2022-11-23",
     "ano":2022,
     "veiculo":"TSE \/ G1",
     "titulo":"PL de Valdemar e Flávio Bolsonaro pede anulação de votos de urnas eletrônicas após derrota eleitoral",
@@ -143,7 +143,7 @@
     "impacto_eleitor":"Tentativa deliberada de anular a soberania do voto popular do eleitor."
   },
   {
-    "data":1673222400000,
+    "data":"2023-01-09",
     "ano":2023,
     "veiculo":"Jornal Nacional \/ Portais Internacionais",
     "titulo":"Invasão e destruição dos Três Poderes em 8 de Janeiro: CPMI aponta omissão e incentivo de líderes bolsonaristas",
@@ -154,7 +154,7 @@
     "impacto_eleitor":"O resultado prático e caótico da ideologia extremista quando confrontada com a perda do poder."
   },
   {
-    "data":1710201600000,
+    "data":"2024-03-12",
     "ano":2024,
     "veiculo":"Senado Federal \/ CartaCapital",
     "titulo":"Flávio Bolsonaro lidera articulação no Senado por PEC que limita poderes do STF e projeto de anistia a golpistas",
@@ -165,7 +165,7 @@
     "impacto_eleitor":"Busca contínua de impunidade para criminosos antidemocráticos."
   },
   {
-    "data":1747612800000,
+    "data":"2025-05-19",
     "ano":2025,
     "veiculo":"Poder360 \/ Estadão",
     "titulo":"Senador Flávio Bolsonaro defende impeachment em massa de ministros do STF em discurso no plenário",
@@ -176,7 +176,7 @@
     "impacto_eleitor":"Promove caos político perpétuo em vez de foco no desenvolvimento econômico e social."
   },
   {
-    "data":1571702400000,
+    "data":"2019-10-22",
     "ano":2019,
     "veiculo":"Senado Federal \/ Diário Oficial",
     "titulo":"Flávio Bolsonaro vota a favor da Reforma da Previdência com endurecimento de regras para aposentadoria do trabalhador",
@@ -187,7 +187,7 @@
     "impacto_eleitor":"Voto direto contra o futuro previdenciário da classe trabalhadora."
   },
   {
-    "data":1586908800000,
+    "data":"2020-04-15",
     "ano":2020,
     "veiculo":"Câmara \/ Senado \/ UOL",
     "titulo":"Governo apoiado por Flávio propõe Auxílio Emergencial de apenas R$ 200 na pandemia; Congresso teve que elevar para R$ 600",
@@ -198,7 +198,7 @@
     "impacto_eleitor":"Falta de sensibilidade social com quem não tinha renda para comprar comida."
   },
   {
-    "data":1623888000000,
+    "data":"2021-06-17",
     "ano":2021,
     "veiculo":"Senado Federal \/ Folha",
     "titulo":"Flávio Bolsonaro vota pela privatização da Eletrobras com inclusão de 'jabutis' que encareceram a conta de luz",
@@ -209,7 +209,7 @@
     "impacto_eleitor":"Impacto direto na conta de luz e no custo de vida de todo cidadão."
   },
   {
-    "data":1638403200000,
+    "data":"2021-12-02",
     "ano":2021,
     "veiculo":"Senado Federal",
     "titulo":"Votação da PEC dos Precatórios: Flávio atua para postergar pagamento de dívidas judiciais a professores e aposentados",
@@ -220,7 +220,7 @@
     "impacto_eleitor":"Adiou o direito legal de receber de milhares de credores e servidores públicos."
   },
   {
-    "data":1657756800000,
+    "data":"2022-07-14",
     "ano":2022,
     "veiculo":"Congresso em Foco",
     "titulo":"Flávio e bancada do PL apoiam aumento do Fundo Eleitoral bilionário de R$ 4,9 bilhões para campanhas",
@@ -231,7 +231,7 @@
     "impacto_eleitor":"Bilhões do contribuinte drenados diretamente para o caixa de partidos políticos."
   },
   {
-    "data":1692835200000,
+    "data":"2023-08-24",
     "ano":2023,
     "veiculo":"Senado Federal \/ Agência Senado",
     "titulo":"Flávio Bolsonaro vota contra a nova política de valorização permanente do Salário Mínimo de Lula",
@@ -242,7 +242,7 @@
     "impacto_eleitor":"Evidência documental de voto contra o aumento da renda dos mais pobres."
   },
   {
-    "data":1716854400000,
+    "data":"2024-05-28",
     "ano":2024,
     "veiculo":"O Globo \/ Valor",
     "titulo":"Flávio Bolsonaro atua como relator da PEC das Praias, abrindo brecha para privatização de áreas litorâneas",
@@ -253,7 +253,7 @@
     "impacto_eleitor":"Privatização de bens públicos em favor de especuladores de altíssima renda."
   },
   {
-    "data":1762732800000,
+    "data":"2025-11-10",
     "ano":2025,
     "veiculo":"Folha \/ Poder360",
     "titulo":"Bancada do PL obstrui votação da isenção do Imposto de Renda para quem ganha até R$ 5.000 proposta pelo governo Lula",

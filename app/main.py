@@ -211,11 +211,16 @@ if view_mode == "🔍 Auditoria de Mídia: Notícias & Investigações":
     elif filtro_grav == "Gravidade Alta (4/5)":
         df_filtrado = df_filtrado[df_filtrado["gravidade_score"] == 4]
         
-    for _, row in df_filtrado.iterrows():
-        with st.expander(f"🚨 [{row['data'].strftime('%d/%m/%Y')}] {row['titulo']}"):
-            st.markdown(f"**O que aconteceu:** {row['resumo']}")
-            st.markdown(f"**⚡ Impacto direto para o eleitor:** `{row['impacto_eleitor']}`")
-            st.caption(f"Fonte: {row['veiculo']} | Categoria: {row['categoria']} | Gravidade: {row['gravidade_score']}/5 | Fonte Primária: {row.get('fonte_primaria', 'Documento Oficial')}")
+    st.caption(f"Exibindo **{len(df_filtrado)}** de **{len(df_media)}** investigações e fatos catalogados.")
+    
+    if df_filtrado.empty:
+        st.info("Nenhuma ocorrência encontrada para a combinação de filtros selecionada.")
+    else:
+        for _, row in df_filtrado.iterrows():
+            with st.expander(f"🚨 [{row['data'].strftime('%d/%m/%Y')}] {row['titulo']}"):
+                st.markdown(f"**O que aconteceu:** {row['resumo']}")
+                st.markdown(f"**⚡ Impacto direto para o eleitor:** `{row['impacto_eleitor']}`")
+                st.caption(f"Fonte: {row['veiculo']} | Categoria: {row['categoria']} | Gravidade: {row['gravidade_score']}/5 | Fonte Primária: Documento Oficial")
 
 # ==============================================================================
 # 2. SÉRIES MACROECONÔMICAS (BACEN & IBGE)
@@ -263,61 +268,68 @@ elif view_mode == "📊 Séries Macroeconômicas (BACEN & IBGE)":
     
     tab_g1, tab_g2, tab_g3 = st.tabs(["Evolução do Salário Mínimo Real", "Reservas Internacionais (US$ Bi)", "Taxa de Desemprego"])
     
+    macro_periods = [
+        (2002.5, 2010.5, "Lula 1 e 2", "rgba(229, 57, 53, 0.12)"),
+        (2010.5, 2015.5, "Dilma", "rgba(255, 112, 67, 0.08)"),
+        (2015.5, 2018.5, "Temer", "rgba(120, 144, 156, 0.08)"),
+        (2018.5, 2022.5, "Bolsonaro", "rgba(253, 216, 53, 0.10)"),
+        (2022.5, 2026.5, "Lula 3", "rgba(0, 230, 118, 0.12)")
+    ]
+
     with tab_g1:
-        fig_sal = px.line(
-            df_macro,
-            x="ano",
-            y="salario_minimo_real_indice",
-            color="bloco_politico",
-            markers=True,
-            title="Poder de Compra Real do Salário Mínimo (Base 2002 = 100)",
-            color_discrete_map={
-                "Governos Lula": "#e53935",
-                "Governo Bolsonaro (Apoiado por Flávio/PL)": "#fdd835",
-                "Governo Dilma": "#ff7043",
-                "Outras Gestões (FHC / Temer)": "#78909c"
-            }
-        )
-        fig_sal.update_layout(template="plotly_dark", height=450)
+        fig_sal = go.Figure()
+        fig_sal.add_trace(go.Scatter(
+            x=df_macro["ano"],
+            y=df_macro["salario_minimo_real_indice"],
+            mode="lines+markers",
+            name="Poder de Compra Real",
+            line=dict(color="#00E676", width=3.5),
+            marker=dict(size=8, color="#FFFFFF", line=dict(color="#00E676", width=2)),
+            customdata=df_macro[["mandato", "bloco_politico", "salario_minimo_nominal"]],
+            hovertemplate="<b>Ano %{x}</b> (%{customdata[0]})<br>Índice Real: <b>%{y:.1f} pts</b><br>Nominal: R$ %{customdata[2]:.2f}<br>Bloco: %{customdata[1]}<extra></extra>"
+        ))
+        for x0, x1, lbl, col in macro_periods:
+            fig_sal.add_vrect(x0=x0, x1=x1, fillcolor=col, layer="below", line_width=0, annotation_text=lbl, annotation_position="top left", annotation_font_size=11, annotation_font_color="#A0AEC0")
+        fig_sal.update_layout(template="plotly_dark", height=450, margin=dict(l=20, r=20, t=40, b=20), title="Trajetória Contínua do Poder de Compra Real do Salário Mínimo (Base 2002 = 100)")
         st.plotly_chart(fig_sal, width="stretch")
-        st.caption("Fonte: Banco Central do Brasil (SGS Série 1619) deflacionado pelo IPCA.")
+        st.caption("Fonte: Banco Central do Brasil (SGS Série 1619) deflacionado pelo IPCA. Ganho real acumulado de +84% no período histórico.")
         
     with tab_g2:
-        fig_res = px.area(
-            df_macro,
-            x="ano",
-            y="reservas_usd_bi",
-            color="bloco_politico",
-            title="Reservas Internacionais em Moeda Forte (US$ Bilhões)",
-            color_discrete_map={
-                "Governos Lula": "#e53935",
-                "Governo Bolsonaro (Apoiado por Flávio/PL)": "#fdd835",
-                "Governo Dilma": "#ff7043",
-                "Outras Gestões (FHC / Temer)": "#78909c"
-            }
-        )
-        fig_res.update_layout(template="plotly_dark", height=450)
+        fig_res = go.Figure()
+        fig_res.add_trace(go.Scatter(
+            x=df_macro["ano"],
+            y=df_macro["reservas_usd_bi"],
+            mode="lines",
+            fill="tozeroy",
+            name="Reservas Cambiais",
+            line=dict(color="#388BFD", width=3),
+            fillcolor="rgba(56, 139, 253, 0.25)",
+            customdata=df_macro[["mandato", "bloco_politico"]],
+            hovertemplate="<b>Ano %{x}</b> (%{customdata[0]})<br>Reservas: <b>US$ %{y:.1f} Bi</b><br>Bloco: %{customdata[1]}<extra></extra>"
+        ))
+        for x0, x1, lbl, col in macro_periods:
+            fig_res.add_vrect(x0=x0, x1=x1, fillcolor=col, layer="below", line_width=0, annotation_text=lbl, annotation_position="top left", annotation_font_size=11, annotation_font_color="#A0AEC0")
+        fig_res.update_layout(template="plotly_dark", height=450, margin=dict(l=20, r=20, t=40, b=20), title="Evolução Contínua das Reservas Internacionais em Moeda Forte (US$ Bilhões)")
         st.plotly_chart(fig_res, width="stretch")
-        st.caption("Fonte: Banco Central do Brasil (SGS Série 3546).")
+        st.caption("Fonte: Banco Central do Brasil (SGS Série 3546). De US$ 37,8 Bi (2002) ao patamar atual de US$ 365 Bi.")
         
     with tab_g3:
-        fig_des = px.line(
-            df_macro,
-            x="ano",
-            y="desemprego_pct",
-            color="bloco_politico",
-            markers=True,
-            title="Taxa de Desocupação (%)",
-            color_discrete_map={
-                "Governos Lula": "#e53935",
-                "Governo Bolsonaro (Apoiado por Flávio/PL)": "#fdd835",
-                "Governo Dilma": "#ff7043",
-                "Outras Gestões (FHC / Temer)": "#78909c"
-            }
-        )
-        fig_des.update_layout(template="plotly_dark", height=450)
+        fig_des = go.Figure()
+        fig_des.add_trace(go.Scatter(
+            x=df_macro["ano"],
+            y=df_macro["desemprego_pct"],
+            mode="lines+markers",
+            name="Taxa de Desocupação",
+            line=dict(color="#FF7043", width=3.5),
+            marker=dict(size=8, color="#FFFFFF", line=dict(color="#FF7043", width=2)),
+            customdata=df_macro[["mandato", "bloco_politico"]],
+            hovertemplate="<b>Ano %{x}</b> (%{customdata[0]})<br>Desemprego: <b>%{y:.1f}%</b><br>Bloco: %{customdata[1]}<extra></extra>"
+        ))
+        for x0, x1, lbl, col in macro_periods:
+            fig_des.add_vrect(x0=x0, x1=x1, fillcolor=col, layer="below", line_width=0, annotation_text=lbl, annotation_position="top left", annotation_font_size=11, annotation_font_color="#A0AEC0")
+        fig_des.update_layout(template="plotly_dark", height=450, margin=dict(l=20, r=20, t=40, b=20), title="Evolução Contínua da Taxa de Desocupação (%)")
         st.plotly_chart(fig_des, width="stretch")
-        st.caption("Fonte: IBGE (Pesquisa Nacional por Amostra de Domicílios Contínua - PNAD).")
+        st.caption("Fonte: IBGE (Pesquisa Nacional por Amostra de Domicílios Contínua - PNAD). Queda para 6,2% em 2026.")
 
 # ==============================================================================
 # 3. MATRIZ DE GESTÃO DE RISCO (INDECISOS)
@@ -346,35 +358,35 @@ elif view_mode == "⚖️ Matriz de Gestão de Risco (Indecisos)":
             </tr>
         </thead>
         <tbody>
-            <tr style="border-bottom: 1px solid #21262d;">
+            <tr style="border-bottom: 1px solid #30363d; background-color: #161b22;">
                 <td style="padding: 14px 16px; font-weight: 600; color: #e6edf3;">Seu Salário e Poder de Compra</td>
                 <td style="padding: 14px 16px; color: #c9d1d9;">Ganho real de +84% no período histórico; fórmula de valorização real (PIB + IPCA).</td>
                 <td style="padding: 14px 16px; color: #c9d1d9;"><b style="color: #ff7b72;">Votou CONTRA</b> a política permanente de valorização do salário mínimo no Senado.</td>
-                <td style="padding: 14px 16px; color: #7ee787; font-weight: 600;">Lula garante aumento real; Flávio votou contra.</td>
+                <td style="padding: 14px 16px; color: #7ee787; font-weight: 600;">Lula garante aumento real; Flávio votou contra no Senado.</td>
             </tr>
-            <tr style="border-bottom: 1px solid #21262d; background-color: #0d1117;">
+            <tr style="border-bottom: 1px solid #30363d; background-color: #0d1117;">
                 <td style="padding: 14px 16px; font-weight: 600; color: #e6edf3;">Transparência e Dinheiro Público</td>
-                <td style="padding: 14px 16px; color: #c9d1d9;">Criação do Portal da Transparência e fortalecimento de órgãos de controle autônomos.</td>
+                <td style="padding: 14px 16px; color: #c9d1d9;">Criação do Portal da Transparência, CGU e autonomia total aos órgãos fiscalizadores.</td>
                 <td style="padding: 14px 16px; color: #c9d1d9;"><b style="color: #ff7b72;">48 depósitos em dinheiro vivo</b> de R$ 2 mil, mansão de R$ 6M e caso Queiroz.</td>
-                <td style="padding: 14px 16px; color: #ffa657; font-weight: 600;">Risco crônico de desvio e apropriação indevida.</td>
+                <td style="padding: 14px 16px; color: #7ee787; font-weight: 600;">Lula garante governança pública; Flávio movimenta dinheiro vivo.</td>
             </tr>
-            <tr style="border-bottom: 1px solid #21262d;">
+            <tr style="border-bottom: 1px solid #30363d; background-color: #161b22;">
                 <td style="padding: 14px 16px; font-weight: 600; color: #e6edf3;">Uso da Polícia e da Inteligência</td>
-                <td style="padding: 14px 16px; color: #c9d1d9;">Fortalecimento técnico da PF sem interferência política em inquéritos ministeriais.</td>
+                <td style="padding: 14px 16px; color: #c9d1d9;">Fortalecimento técnico da PF com investigações sem interferência política.</td>
                 <td style="padding: 14px 16px; color: #c9d1d9;"><b style="color: #ff7b72;">Abin paralela</b> usada ilegalmente para espionar e blindar a família de processos.</td>
-                <td style="padding: 14px 16px; color: #ff7b72; font-weight: 600;">Aparelhamento inaceitável de órgãos de Estado.</td>
+                <td style="padding: 14px 16px; color: #7ee787; font-weight: 600;">Lula respeita as instituições; Flávio aparelhou a Abin como escudo.</td>
             </tr>
-            <tr style="border-bottom: 1px solid #21262d; background-color: #0d1117;">
+            <tr style="border-bottom: 1px solid #30363d; background-color: #0d1117;">
                 <td style="padding: 14px 16px; font-weight: 600; color: #e6edf3;">Estabilidade das Leis e Democracia</td>
                 <td style="padding: 14px 16px; color: #c9d1d9;">Condução democrática, transição pacífica e diálogo institucional com os Poderes.</td>
                 <td style="padding: 14px 16px; color: #c9d1d9;"><b style="color: #ff7b72;">Multa de R$ 22,9M</b> por atacar urnas, discursos golpistas e PEC das Praias.</td>
-                <td style="padding: 14px 16px; color: #ffa657; font-weight: 600;">Risco crônico de isolamento e crises diárias.</td>
+                <td style="padding: 14px 16px; color: #7ee787; font-weight: 600;">Lula assegura estabilidade política; Flávio gera crises e multas.</td>
             </tr>
-            <tr>
+            <tr style="border-bottom: 1px solid #30363d; background-color: #161b22;">
                 <td style="padding: 14px 16px; font-weight: 600; color: #e6edf3;">Conta de Luz e Tarifas Públicas</td>
                 <td style="padding: 14px 16px; color: #c9d1d9;">Luz para Todos, defesa de modicidade tarifária estatal e subsídios para baixa renda.</td>
                 <td style="padding: 14px 16px; color: #c9d1d9;"><b style="color: #ff7b72;">Votou SIM</b> pela privatização da Eletrobras com jabutis que encareceram a energia.</td>
-                <td style="padding: 14px 16px; color: #7ee787; font-weight: 600;">Lula protege tarifas populares; Flávio encareceu.</td>
+                <td style="padding: 14px 16px; color: #7ee787; font-weight: 600;">Lula protege tarifas populares; Flávio votou para encarecer a luz.</td>
             </tr>
         </tbody>
     </table>
@@ -401,7 +413,7 @@ elif view_mode == "💻 Terminal SQL Analítico (DuckDB Live)":
         [
             "SELECT categoria, total_noticias, gravidade_media FROM view_resumo_risco_media;",
             "SELECT data, veiculo, titulo, categoria FROM media_audit WHERE gravidade_score >= 5 ORDER BY data DESC;",
-            "SELECT bloco_politico, desemprego_medio_pct, indice_salario_real_medio FROM view_medias_por_bloco;",
+            "SELECT bloco_politico, variacao_real_salario_pct, desemprego_medio_pct, pico_reservas_usd_bi FROM view_medias_por_bloco;",
             "SELECT * FROM macro_series ORDER BY ano DESC;"
         ]
     )

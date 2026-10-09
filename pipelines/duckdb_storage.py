@@ -31,18 +31,30 @@ def init_duckdb():
             SELECT * FROM read_csv_auto('{media_csv.replace(os.sep, "/")}');
         """)
         
-    # View analítica: Comparativo de médias macro por bloco de governo
+    # View analítica: Comparativo de desempenho e ganho real por bloco de governo
     conn.execute("""
         CREATE OR REPLACE VIEW view_medias_por_bloco AS
+        WITH limites AS (
+            SELECT 
+                bloco_politico,
+                arg_min(salario_minimo_real_indice, ano) AS sal_inicial,
+                arg_max(salario_minimo_real_indice, ano) AS sal_final,
+                ROUND(AVG(desemprego_pct), 2) AS desemprego_medio_pct,
+                ROUND(AVG(inflacao_ipca_pct), 2) AS inflacao_media_pct,
+                ROUND(MAX(reservas_usd_bi), 2) AS pico_reservas_usd_bi
+            FROM macro_series
+            GROUP BY bloco_politico
+        )
         SELECT 
             bloco_politico,
-            ROUND(AVG(desemprego_pct), 2) AS desemprego_medio_pct,
-            ROUND(AVG(inflacao_ipca_pct), 2) AS inflacao_media_pct,
-            ROUND(AVG(salario_minimo_real_indice), 2) AS indice_salario_real_medio,
-            ROUND(MAX(reservas_usd_bi), 2) AS pico_reservas_usd_bi
-        FROM macro_series
-        GROUP BY bloco_politico
-        ORDER BY indice_salario_real_medio DESC;
+            sal_inicial AS salario_real_inicio,
+            sal_final AS salario_real_fim,
+            ROUND(((sal_final - sal_inicial) / sal_inicial) * 100, 2) AS variacao_real_salario_pct,
+            desemprego_medio_pct,
+            inflacao_media_pct,
+            pico_reservas_usd_bi
+        FROM limites
+        ORDER BY variacao_real_salario_pct DESC;
     """)
     
     # View analítica: Resumo de gravidade de escândalos por categoria
