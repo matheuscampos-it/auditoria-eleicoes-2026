@@ -441,14 +441,19 @@ elif view_mode == "🌐 Repositório de Fontes & Documentos":
     """)
     
     st.markdown("""
-    ### 🏛️ Fontes Governamentais e Séries Econômicas
-    - **Banco Central do Brasil:** [Sistema Gerenciador de Séries Temporais (SGS)](https://www.bcb.gov.br/) (Séries 3546, 1619, 433, 432).
-    - **IBGE:** [PNAD Contínua - Séries Históricas de Desocupação e Renda](https://agenciadenoticias.ibge.gov.br/).
-    - **Senado Federal:** [legis.senado.leg.br - Votações Nominais e Tramitação de PECs](https://www12.senado.leg.br/).
+    ### 🏛️ Fontes Governamentais, Leis e Séries Econômicas
+    - **Banco Central do Brasil (BACEN):** [Sistema Gerenciador de Séries Temporais (SGS)](https://www.bcb.gov.br/) (Séries 3546, 1619, 433, 432).
+    - **IBGE:** [PNAD Contínua & Séries SIDRA - Desocupação e Renda](https://www.ibge.gov.br/).
+    - **Senado Federal (Salário Mínimo):** [Agência Senado - Aprovação da Política Permanente de Valorização Real](https://www12.senado.leg.br/noticias/materias/2023/08/24/salario-minimo-de-r-1-320-e-correcao-do-ir-vao-a-sancao).
+    - **Privatização da Eletrobras (MP 1031/2021):** [Poder360 - Votação Nominal dos Senadores](https://www.poder360.com.br/congresso/saiba-como-votou-cada-partido-e-senador-na-mp-da-capitalizacao-da-eletrobras/) e [Senado - Ficha da Matéria](https://www25.senado.leg.br/web/atividade/materias/-/materia/148419).
+    - **PEC das Praias (PEC 3/2022):** [Senado Federal - Tramitação Oficial](https://www25.senado.leg.br/web/atividade/materias/-/materia/151923).
+    - **Teto de Gastos (EC 95/2016):** [Câmara dos Deputados - Histórico da Tramitação](https://www.camara.leg.br/propostas-legislativas/2088351).
     
     ### ⚖️ Investigações, Inquéritos e Tribunais
-    - **Operação Vigilância Aproximada (STF / PF):** Inquérito sobre espionagem e relatórios sigilosos da Abin paralela.
-    - **Tribunal Superior Eleitoral (TSE):** Acórdão da condenação por litigância de má-fé e multa de R$ 22,9M ao PL.
-    - **Conselho de Controle de Atividades Financeiras (Coaf):** Relatórios de inteligência financeira (48 depósitos em espécie).
-    - **Ministério Público do Estado do Rio de Janeiro (MP-RJ):** Denúncia e perícia contábil da franquia de chocolates.
+    - **Operação Vigilância Aproximada (Abin Paralela):** [G1 / PF - Abin espionou auditores da Receita para orientar defesa de Flávio](https://g1.globo.com/politica/noticia/2024/07/11/abin-espionou-auditores-da-receita-federal-que-apuravam-possivel-rachadinha-de-flavio-bolsonaro-diz-pf.ghtml).
+    - **Áudio no Palácio do Planalto:** [CNN Brasil - Íntegra da gravação da reunião entre Bolsonaro, Ramagem e advogadas](https://www.cnnbrasil.com.br/politica/integra-gravacao-bolsonaro-ramagem/).
+    - **Evolução Patrimonial (Mansão Lago Sul):** [Jornal Nacional - Compra e Financiamento da Mansão de R$ 6 Milhões](https://g1.globo.com/jornal-nacional/noticia/2021/03/02/flavio-bolsonaro-compra-casa-de-quase-r-6-milhoes-em-area-nobre-de-brasilia.ghtml).
+    - **Conselho de Controle de Atividades Financeiras (Coaf):** [Jornal Nacional - Relatório do Coaf: 48 depósitos em espécie](https://g1.globo.com/jornal-nacional/noticia/2019/01/18/jn-tem-acesso-a-relatorio-do-coaf-sobre-movimentacoes-de-flavio-bolsonaro.ghtml).
+    - **Lavagem de Capitais (Franquia de Chocolates):** [Jornal Nacional - Investigação e Perícia Contábil do MP-RJ](https://g1.globo.com/jornal-nacional/noticia/2019/12/19/investigacao-que-envolve-flavio-bolsonaro-aponta-indicios-de-lavagem-de-dinheiro.ghtml).
+    - **Tribunal Superior Eleitoral (TSE):** [G1 / TSE - Moraes multa PL em R$ 22,9M por litigância de má-fé contra as urnas](https://g1.globo.com/politica/noticia/2022/11/23/moraes-decisao-pl-relatorio-urnas.ghtml).
     """)
