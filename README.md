@@ -1,28 +1,28 @@
 # ⚖️ Auditoria de Dados: Eleições Presidenciais 2026 (Lula vs. Flávio Bolsonaro)
 
-Repositório de código aberto e jornalismo de dados desenvolvido para auditar empiricamente a trajetória, as votações legislativas e os indicadores econômicos dos dois principais concorrentes no segundo turno das eleições presidenciais de 2026: **Luiz Inácio Lula da Silva** e **Flávio Bolsonaro**.
+Repositório aberto e independente com dados oficiais, estatísticas do Banco Central e documentos da Justiça para comparar com rigor e clareza os dois principais candidatos no 2º turno de 2026: **Luiz Inácio Lula da Silva** e **Flávio Bolsonaro**.
 
 > 🚀 **Acesse Online Sem Instalar Nada:**  
-> - 📊 **[Dashboard Analítico Interativo (Web Live)](https://matheuscampos-it.github.io/auditoria-eleicoes-2026/dashboard.html)**  
-> - 🔗 **[Agregador Central Linktree (GitHub Pages)](https://matheuscampos-it.github.io/auditoria-eleicoes-2026/)**  
+> - 📊 **[Painel Analítico Interativo (Web Live)](https://matheuscampos-it.github.io/auditoria-eleicoes-2026/dashboard.html)**  
+> - 🔗 **[Agregador Central de Links (GitHub Pages)](https://matheuscampos-it.github.io/auditoria-eleicoes-2026/)**  
 > - 📑 **[Dossiê de Fontes e Certidões Oficiais (Telegraph)](https://telegra.ph/Auditoria-2026-Fontes-e-Documentos-Oficiais-10-09)**
 
 ---
 
 ## 🎯 Pilares da Auditoria
 
-1. **Governança Macroeconômica & Séries Temporais Oficiais (Gestão Lula):**  
-   Extração direta de séries temporais oficiais do **Banco Central do Brasil (BACEN SGS)** e **IBGE (SIDRA/PNAD)** de 2002 a 2026, comprovando:
-   - Ganho real de **+84%** no poder de compra do salário mínimo (deflacionado pelo IPCA).
-   - Acúmulo de mais de **US$ 365 bilhões** em reservas cambiais internacionais.
-   - Taxa de desocupação (desemprego) em **6,2%**, próximas das mínimas históricas.
+1. **Economia Real & Séries Oficiais (Governo Lula):**  
+   Extração direta de dados públicos do **Banco Central do Brasil (BACEN SGS)** e **IBGE (PNAD Contínua)** de 2002 a 2026, comprovando:
+   - Ganho real de **+84%** no poder de compra do salário mínimo (acima da inflação).
+   - Acúmulo de mais de **US$ 365 bilhões** em reservas cambiais para proteger o país de crises.
+   - Taxa de desemprego em **6,2%**, próxima das mínimas históricas.
 
-2. **Auditoria de Mídia, Notícias & Investigações (Flávio Bolsonaro & PL):**  
-   Base analítica e Processamento de Linguagem Natural (NLP) categorizando eventos factualizados em fontes primárias:
-   - **Votações Nominais no Senado:** Voto formal contra a política de valorização permanente do salário mínimo e voto a favor da MP da Eletrobras com jabutis tarifários.
-   - **Inteligência Financeira (Coaf):** 48 depósitos fracionados de R$ 2.000 em dinheiro vivo e compra de mansão de R$ 6 milhões no Lago Sul com renda parlamentar.
-   - **Inquérito Policial (PF/STF):** Uso indevido da Abin paralela para confecção de relatórios sigilosos de blindagem privada.
-   - **Tribunais Eleitorais (TSE):** Multa de R$ 22,9 milhões ao PL por litigância de má-fé contra as urnas eletrônicas.
+2. **Fatos, Votações & Investigações Judiciais (Flávio Bolsonaro & PL):**  
+   Base factual de investigações e votações no Congresso, todas com link para a notícia ou documento original:
+   - **Salário Mínimo e Energia:** Votou CONTRA a valorização permanente do salário mínimo e a favor de emendas na privatização da Eletrobras que encareceram a conta de luz.
+   - **Dinheiro em Espécie (Coaf):** 48 depósitos fracionados de R$ 2.000 em dinheiro vivo na conta e compra de mansão de R$ 6 milhões no Lago Sul com renda parlamentar.
+   - **Abin Paralela (PF/STF):** Polícia Federal comprovou espionagem ilegal para blindar Flávio nas investigações das rachadinhas.
+   - **Tribunal Superior Eleitoral (TSE):** Multa de R$ 22,9 milhões ao PL por tentar anular a eleição presidencial sem apresentar provas.
 
 ---
 

@@ -4,6 +4,7 @@ Foco exclusivo em dados confiáveis, séries temporais oficiais e auditoria fact
 """
 
 import os
+import urllib.parse
 import streamlit as st
 import pandas as pd
 import plotly.express as px
@@ -122,13 +123,13 @@ st.sidebar.markdown("""
 if view_mode == "🔍 Auditoria de Mídia: Notícias & Investigações":
     st.markdown("""
     <div>
-        <span class="badge-pill badge-alert">DATA AUDIT</span>
-        <span class="badge-pill badge-tech">NLP & MINERAÇÃO DE DADOS</span>
+        <span class="badge-pill badge-alert">AUDITORIA DE FATOS</span>
+        <span class="badge-pill badge-tech">DOCUMENTOS OFICIAIS</span>
     </div>
-    <h1 style='margin-top: 10px;'>Auditoria de Mídia: Notícias, Investigações e Votações</h1>
+    <h1 style='margin-top: 10px;'>Investigações, Votações e Fatos Comprovados</h1>
     <p style='color: #8b949e; font-size: 1.05rem;'>
-        Mapeamento empírico de notícias de repercussão judicial, contradições parlamentares e investigações criminais 
-        envolvendo Flávio Bolsonaro, seus familiares e o partido PL. Todos os eventos foram auditados em fontes primárias.
+        Levantamento com base em inquéritos da Polícia Federal, relatórios do Coaf e votações nominais no Senado 
+        envolvendo Flávio Bolsonaro e o PL. Cada fato possui link direto para a reportagem ou certidão original.
     </p>
     """, unsafe_allow_html=True)
     
@@ -136,25 +137,25 @@ if view_mode == "🔍 Auditoria de Mídia: Notícias & Investigações":
     with col1:
         st.markdown("""
         <div class="metric-card">
-            <div class="metric-title">Votos Contra Renda</div>
-            <div class="metric-value" style="color: #ff5252;">Salário Mínimo</div>
-            <div class="metric-desc">Votou CONTRA a política permanente de reajuste pelo PIB</div>
+            <div class="metric-title">Voto no Senado</div>
+            <div class="metric-value" style="color: #ff5252;">Contra o Salário</div>
+            <div class="metric-desc">Votou CONTRA a lei de aumento real permanente acima da inflação</div>
         </div>
         """, unsafe_allow_html=True)
     with col2:
         st.markdown("""
         <div class="metric-card">
-            <div class="metric-title">Aparelhamento Institucional</div>
+            <div class="metric-title">Polícia & Inteligência</div>
             <div class="metric-value" style="color: #ff9100;">Abin Paralela</div>
-            <div class="metric-desc">Comprovado pela Polícia Federal no inquérito do STF</div>
+            <div class="metric-desc">PF comprovou espionagem ilegal para blindar Flávio nas rachadinhas</div>
         </div>
         """, unsafe_allow_html=True)
     with col3:
         st.markdown("""
         <div class="metric-card">
-            <div class="metric-title">Patrimônio em Espécie</div>
+            <div class="metric-title">Dinheiro em Espécie</div>
             <div class="metric-value" style="color: #40c4ff;">48 Depósitos</div>
-            <div class="metric-desc">Fracionados em R$ 2 mil no caixa eletrônico (Coaf)</div>
+            <div class="metric-desc">Coaf identificou depósitos fracionados de R$ 2 mil no caixa da Alerj</div>
         </div>
         """, unsafe_allow_html=True)
         
@@ -231,7 +232,6 @@ if view_mode == "🔍 Auditoria de Mídia: Notícias & Investigações":
                 st.markdown(f"**O que aconteceu:** {row['resumo']}")
                 st.markdown(f"**⚡ Impacto direto para o eleitor:** `{row['impacto_eleitor']}`")
                 st.caption(f"Veículo: {row['veiculo']} | Categoria: {row['categoria']} | Gravidade: {row['gravidade_score']}/5 | Alvo: {row['alvo']}")
-                import urllib.parse
                 busca_url = f"https://www.google.com/search?q={urllib.parse.quote_plus(str(row['titulo']) + ' ' + str(row['veiculo']))}"
                 st.markdown(f"[🔗 Verificar Notícia na Íntegra (Google Notícias)]({busca_url})")
 
@@ -244,10 +244,10 @@ elif view_mode == "📊 Séries Macroeconômicas (BACEN & IBGE)":
         <span class="badge-pill badge-success">DADOS OFICIAIS</span>
         <span class="badge-pill badge-tech">BANCO CENTRAL & IBGE</span>
     </div>
-    <h1 style='margin-top: 10px;'>Séries Macroeconômicas Históricas (2002 - 2026)</h1>
+    <h1 style='margin-top: 10px;'>Economia Real: Salário, Reservas e Emprego (2002 - 2026)</h1>
     <p style='color: #8b949e; font-size: 1.05rem;'>
-        Séries temporais auditáveis extraídas diretamente dos sistemas públicos <b>SGS do Banco Central</b> 
-        e <b>SIDRA do IBGE</b>, demonstrando indicadores reais de renda, reservas internacionais e emprego.
+        Números oficiais do <b>Banco Central do Brasil</b> e do <b>IBGE</b> mostrando a evolução contínua 
+        do poder de compra do salário mínimo, das reservas cambiais do país e do desemprego entre diferentes governos.
     </p>
     """, unsafe_allow_html=True)
     
@@ -257,23 +257,23 @@ elif view_mode == "📊 Séries Macroeconômicas (BACEN & IBGE)":
         <div class="metric-card">
             <div class="metric-title">Salário Mínimo Real</div>
             <div class="metric-value" style="color: #38ef7d;">+84%</div>
-            <div class="metric-desc">Poder de compra real deflacionado pelo IPCA (2002-2026)</div>
+            <div class="metric-desc">Aumento real de poder de compra acima da inflação (2002 a 2026)</div>
         </div>
         """, unsafe_allow_html=True)
     with col2:
         st.markdown("""
         <div class="metric-card">
-            <div class="metric-title">Reservas Cambiais</div>
+            <div class="metric-title">Reservas em Moeda Forte</div>
             <div class="metric-value" style="color: #58a6ff;">US$ 365 Bi</div>
-            <div class="metric-desc">Muralha cambial construída para proteger a moeda nacional</div>
+            <div class="metric-desc">Colchão de segurança cambial para proteger o Brasil contra crises externas</div>
         </div>
         """, unsafe_allow_html=True)
     with col3:
         st.markdown("""
         <div class="metric-card">
-            <div class="metric-title">Taxa de Desocupação</div>
-            <div class="metric-value" style="color: #38ef7d;">6.2%</div>
-            <div class="metric-desc">Taxa de desemprego em mínimas históricas (PNAD/IBGE)</div>
+            <div class="metric-title">Taxa de Desemprego</div>
+            <div class="metric-value" style="color: #38ef7d;">6,2%</div>
+            <div class="metric-desc">Menor taxa de desocupação da série recente medida pelo IBGE/PNAD</div>
         </div>
         """, unsafe_allow_html=True)
         
@@ -350,12 +350,12 @@ elif view_mode == "📊 Séries Macroeconômicas (BACEN & IBGE)":
 elif view_mode == "⚖️ Matriz de Gestão de Risco (Indecisos)":
     st.markdown("""
     <div>
-        <span class="badge-pill badge-tech">ANÁLISE DE DECISÃO</span>
-        <span class="badge-pill badge-alert">GESTÃO DE RISCO</span>
+        <span class="badge-pill badge-tech">COMPARATIVO DIRETO</span>
+        <span class="badge-pill badge-alert">ANÁLISE PARA INDECISOS</span>
     </div>
-    <h1 style='margin-top: 10px;'>Matriz Comparativa: Previsibilidade vs. Risco Crônico</h1>
+    <h1 style='margin-top: 10px;'>Matriz de Decisão: Estabilidade e Segurança para o Seu Bolso</h1>
     <p style='color: #8b949e; font-size: 1.05rem;'>
-        Para o eleitor indeciso, a decisão não é baseada em torcida partidária, mas em <b>gestão de risco e previsibilidade</b>.
+        Uma comparação direta e sem rodeios entre as ações comprovadas de cada lado. Sem torcida política — apenas fatos reais que afetam o seu dia a dia.
     </p>
     """, unsafe_allow_html=True)
     
@@ -364,42 +364,42 @@ elif view_mode == "⚖️ Matriz de Gestão de Risco (Indecisos)":
     <table style="width: 100%; border-collapse: collapse; background-color: #161b22; border-radius: 10px; overflow: hidden; border: 1px solid #30363d; font-size: 0.95rem;">
         <thead>
             <tr style="background-color: #21262d; border-bottom: 2px solid #30363d; text-align: left;">
-                <th style="padding: 14px 16px; color: #58a6ff; font-weight: 700; text-transform: uppercase;">Eixo de Auditoria</th>
-                <th style="padding: 14px 16px; color: #3fb950; font-weight: 700; text-transform: uppercase;">Gestão Lula (Fatos Comprovados)</th>
+                <th style="padding: 14px 16px; color: #58a6ff; font-weight: 700; text-transform: uppercase;">Tema Principal</th>
+                <th style="padding: 14px 16px; color: #3fb950; font-weight: 700; text-transform: uppercase;">Governo Lula (Fatos Comprovados)</th>
                 <th style="padding: 14px 16px; color: #f85149; font-weight: 700; text-transform: uppercase;">Flávio Bolsonaro & PL (Ações Reais)</th>
-                <th style="padding: 14px 16px; color: #d29922; font-weight: 700; text-transform: uppercase;">A Decisão Lógica</th>
+                <th style="padding: 14px 16px; color: #d29922; font-weight: 700; text-transform: uppercase;">O Que Isso Significa na Prática</th>
             </tr>
         </thead>
         <tbody>
             <tr style="border-bottom: 1px solid #30363d; background-color: #161b22;">
-                <td style="padding: 14px 16px; font-weight: 600; color: #e6edf3;">Seu Salário e Poder de Compra</td>
-                <td style="padding: 14px 16px; color: #c9d1d9;">Ganho real de +84% no período histórico; fórmula de valorização real (PIB + IPCA).</td>
-                <td style="padding: 14px 16px; color: #c9d1d9;"><b style="color: #ff7b72;">Votou CONTRA</b> a política permanente de valorização do salário mínimo no Senado.</td>
-                <td style="padding: 14px 16px; color: #7ee787; font-weight: 600;">Lula garante aumento real; Flávio votou contra no Senado.</td>
+                <td style="padding: 14px 16px; font-weight: 600; color: #e6edf3;">Salário e Poder de Compra</td>
+                <td style="padding: 14px 16px; color: #c9d1d9;">Ganho real de +84% acima da inflação e lei permanente de valorização pelo PIB.</td>
+                <td style="padding: 14px 16px; color: #c9d1d9;"><b style="color: #ff7b72;">Votou CONTRA</b> a lei permanente que garante aumento do salário mínimo acima da inflação.</td>
+                <td style="padding: 14px 16px; color: #7ee787; font-weight: 600;">Lula garantiu aumento real no bolso; Flávio votou contra o reajuste do trabalhador.</td>
             </tr>
             <tr style="border-bottom: 1px solid #30363d; background-color: #0d1117;">
-                <td style="padding: 14px 16px; font-weight: 600; color: #e6edf3;">Transparência e Dinheiro Público</td>
-                <td style="padding: 14px 16px; color: #c9d1d9;">Criação do Portal da Transparência, CGU e autonomia total aos órgãos fiscalizadores.</td>
-                <td style="padding: 14px 16px; color: #c9d1d9;"><b style="color: #ff7b72;">48 depósitos em dinheiro vivo</b> de R$ 2 mil, mansão de R$ 6M e caso Queiroz.</td>
-                <td style="padding: 14px 16px; color: #7ee787; font-weight: 600;">Lula garante governança pública; Flávio movimenta dinheiro vivo.</td>
+                <td style="padding: 14px 16px; font-weight: 600; color: #e6edf3;">Transparência e Honestidade</td>
+                <td style="padding: 14px 16px; color: #c9d1d9;">Criou o Portal da Transparência, fortaleceu a CGU e garantiu fiscalização pública.</td>
+                <td style="padding: 14px 16px; color: #c9d1d9;"><b style="color: #ff7b72;">48 depósitos em dinheiro vivo</b> de R$ 2 mil no caixa eletrônico, mansão de R$ 6M e caso Queiroz.</td>
+                <td style="padding: 14px 16px; color: #7ee787; font-weight: 600;">Lula criou órgãos de controle; Flávio movimentou dinheiro vivo em espécie.</td>
             </tr>
             <tr style="border-bottom: 1px solid #30363d; background-color: #161b22;">
-                <td style="padding: 14px 16px; font-weight: 600; color: #e6edf3;">Uso da Polícia e da Inteligência</td>
-                <td style="padding: 14px 16px; color: #c9d1d9;">Fortalecimento técnico da PF com investigações sem interferência política.</td>
-                <td style="padding: 14px 16px; color: #c9d1d9;"><b style="color: #ff7b72;">Abin paralela</b> usada ilegalmente para espionar e blindar a família de processos.</td>
-                <td style="padding: 14px 16px; color: #7ee787; font-weight: 600;">Lula respeita as instituições; Flávio aparelhou a Abin como escudo.</td>
+                <td style="padding: 14px 16px; font-weight: 600; color: #e6edf3;">Polícia e Segurança</td>
+                <td style="padding: 14px 16px; color: #c9d1d9;">Autonomia técnica para a Polícia Federal combater crimes sem interferência política.</td>
+                <td style="padding: 14px 16px; color: #c9d1d9;"><b style="color: #ff7b72;">Abin paralela</b> usada de forma ilegal para espionar auditores fiscais e blindar a família.</td>
+                <td style="padding: 14px 16px; color: #7ee787; font-weight: 600;">Lula respeita as instituições; Flávio aparelhou a inteligência para se proteger.</td>
             </tr>
             <tr style="border-bottom: 1px solid #30363d; background-color: #0d1117;">
-                <td style="padding: 14px 16px; font-weight: 600; color: #e6edf3;">Estabilidade das Leis e Democracia</td>
-                <td style="padding: 14px 16px; color: #c9d1d9;">Condução democrática, transição pacífica e diálogo institucional com os Poderes.</td>
-                <td style="padding: 14px 16px; color: #c9d1d9;"><b style="color: #ff7b72;">Multa de R$ 22,9M</b> por atacar urnas, discursos golpistas e PEC das Praias.</td>
-                <td style="padding: 14px 16px; color: #7ee787; font-weight: 600;">Lula assegura estabilidade política; Flávio gera crises e multas.</td>
+                <td style="padding: 14px 16px; font-weight: 600; color: #e6edf3;">Democracia e Tranquilidade</td>
+                <td style="padding: 14px 16px; color: #c9d1d9;">Condução pacífica de governos, respeito às eleições e diálogo entre os Poderes.</td>
+                <td style="padding: 14px 16px; color: #c9d1d9;"><b style="color: #ff7b72;">Multa de R$ 22,9M</b> do TSE por atacar as urnas sem provas e relator da PEC das Praias.</td>
+                <td style="padding: 14px 16px; color: #7ee787; font-weight: 600;">Lula traz estabilidade política; Flávio gera crises institucionais e conflitos.</td>
             </tr>
             <tr style="border-bottom: 1px solid #30363d; background-color: #161b22;">
-                <td style="padding: 14px 16px; font-weight: 600; color: #e6edf3;">Conta de Luz e Tarifas Públicas</td>
-                <td style="padding: 14px 16px; color: #c9d1d9;">Luz para Todos, defesa de modicidade tarifária estatal e subsídios para baixa renda.</td>
-                <td style="padding: 14px 16px; color: #c9d1d9;"><b style="color: #ff7b72;">Votou SIM</b> pela privatização da Eletrobras com jabutis que encareceram a energia.</td>
-                <td style="padding: 14px 16px; color: #7ee787; font-weight: 600;">Lula protege tarifas populares; Flávio votou para encarecer a luz.</td>
+                <td style="padding: 14px 16px; font-weight: 600; color: #e6edf3;">Conta de Luz e Energia</td>
+                <td style="padding: 14px 16px; color: #c9d1d9;">Criou o programa Luz para Todos e protege subsídios de energia para famílias de baixa renda.</td>
+                <td style="padding: 14px 16px; color: #c9d1d9;"><b style="color: #ff7b72;">Votou SIM</b> à privatização da Eletrobras com emendas que encareceram a conta de luz.</td>
+                <td style="padding: 14px 16px; color: #7ee787; font-weight: 600;">Lula defende energia acessível; Flávio votou por regras que aumentaram a conta de luz.</td>
             </tr>
         </tbody>
     </table>
